@@ -142,21 +142,21 @@ jobs:
     uses: ./.github/workflows/_pkg_test.yaml
     with:
       config: ${{ needs.init.outputs.test }}
-#  build:
-#    name: Package Build
-#    needs: init
-#    if: fromJSON(needs.init.outputs.run).build  # fromJSON(needs.init.outputs.config).run.package_build
-#    strategy:
-#      fail-fast: false
-#      matrix:
-#        config: ${{ fromJSON(needs.init.outputs.build) }}
-#    uses: ./.github/workflows/_pkg_build.yaml
-#    with:
-#      config: ${{ toJSON(matrix.config) }}
-##      metadata: ${{ needs.init.outputs.metadata }}
-##      ref: ${{ fromJSON(needs.init.outputs.config).checkout.ref }}
-##      repository: ${{ fromJSON(needs.init.outputs.config).checkout.repository }}
-#
+  build:
+    name: Package Build
+    needs: init
+    if: fromJSON(needs.init.outputs.run).build  # fromJSON(needs.init.outputs.config).run.package_build
+    strategy:
+      fail-fast: false
+      matrix:
+        config: ${{ fromJSON(needs.init.outputs.build) }}
+    uses: ./.github/workflows/_pkg_build.yaml
+    with:
+      config: ${{ toJSON(matrix.config) }}
+#      metadata: ${{ needs.init.outputs.metadata }}
+#      ref: ${{ fromJSON(needs.init.outputs.config).checkout.ref }}
+#      repository: ${{ fromJSON(needs.init.outputs.config).checkout.repository }}
+
 #  publish-testpypi:
 #    name: 'Package Publish'
 #    needs: [init, build, test, lint]
