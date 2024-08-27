@@ -1,0 +1,41 @@
+# Install package from a given source and run unit-tests.
+# Install the package and run tests on a matrix of supported Python versions and operating systems.
+
+name: '[Callable]: Package - Test'
+
+on:
+  workflow_call:
+    inputs:
+      config:
+        type: string
+        required: true
+        description: Configuration as a JSON string.
+
+jobs:
+  test:
+    name: '${{ matrix.config.os }} - Py ${{ matrix.config.python-version }}'
+    strategy:
+      fail-fast: false
+      matrix:
+        config: ${{ fromJSON(inputs.config) }}
+    runs-on: ${{ matrix.config.runner }}
+    steps:
+      - uses: RepoDynamics/PyTester@v1
+        with:
+          repository: ${{ matrix.config.repository }}
+          ref: ${{ matrix.config.ref }}
+          path-setup-testsuite: ${{ matrix.config.path-setup-testsuite }}
+          path-setup-package: ${{ matrix.config.path-setup-package }}
+          testsuite-import-name: ${{ matrix.config.testsuite-import-name }}
+          package-source: ${{ matrix.config.package-source }}
+          package-name: ${{ matrix.config.package-name }}
+          package-version: ${{ matrix.config.package-version }}
+          python-version: ${{ matrix.config.python-version }}
+          os: ${{ matrix.config.os }}
+          path-requirements-package: ${{ matrix.config.path-requirements-package }}
+          path-report-pytest: ${{ matrix.config.path-report-pytest }}
+          path-report-coverage: ${{ matrix.config.path-report-coverage }}
+          path-cache-pytest: ${{ matrix.config.path-cache-pytest }}
+          path-cache-coverage: ${{ matrix.config.path-cache-coverage }}
+          retry-sleep-seconds: ${{ matrix.config.retry-sleep-seconds }}
+          retry-sleep-seconds-total: ${{ matrix.config.retry-sleep-seconds-total }}

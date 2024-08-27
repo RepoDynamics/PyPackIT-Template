@@ -1,0 +1,129 @@
+# Generate a distribution package for PyPI.
+# Publish the package on PyPI or TestPyPI.
+# This reusable workflow uses the [pypi-publish](https://github.com/pypa/gh-action-pypi-publish) GitHub Action
+# to publish the distribution package on either PyPI or TestPyPI, depending on the input.
+
+name: '[Callable]: Package - Build'
+
+on:
+  workflow_call:
+    inputs:
+      config:
+        description: Configuration as a JSON string.
+        type: string
+        required: true
+#      ref:
+#        type: string
+#        default: ''
+#        required: false
+#        description: |
+#          Reference (i.e. branch, tag or SHA) of the current repository to checkout,
+#          i.e. the `ref` input of `actions/checkout`.
+#      repository:
+#        type: string
+#        default: ${{ github.repository }}
+#        required: false
+#        description: |
+#          Repository to checkout, i.e. the `repository` input of `actions/checkout`.
+#      metadata:
+#        type: string
+#        required: true
+#        description: |
+#          CI metadata as a JSON string.
+
+jobs:
+
+  build-pure:
+    name: 'Pure Python Distribution'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout Repository: ${{ fromJSON(inputs.config).repository }} @ ${{ fromJSON(inputs.config).ref }}'
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ fromJSON(inputs.config).repository }}
+          ref: ${{ fromJSON(inputs.config).ref }}
+          fetch-depth: 0
+          path: repo
+      - name: 'Set up Python'
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+      - name: 'Install Requirements'
+        shell: bash
+        run: |
+          echo "::group::Update pip"
+          python3 -m pip install --upgrade pip
+          echo "::endgroup::"
+          echo "::group::Install build"
+          python3 -m pip install --upgrade build
+          echo "::endgroup::"
+          echo "::group::Install readme-renderer"
+          python3 -m pip install --upgrade readme-renderer[md]
+          echo "::endgroup::"
+          echo "::group::Install twine"
+          python3 -m pip install --upgrade twine
+          echo "::endgroup::"
+          echo "::group::Display Python version"
+          python3 -c "import sys; print(sys.version)"
+          echo "::endgroup::"
+          echo "::group::Display environment"
+          python3 -m pip list
+          echo "::endgroup::"
+      - name: 'Build distribution'
+        shell: bash
+        env:
+          PURE_PYTHON: ${{ fromJSON(inputs.config).pure-python }}
+        run: |
+          if $PURE_PYTHON; then
+            python3 -m build ./repo --outdir ./build/dist
+          else
+            python3 -m build ./repo --outdir ./build/dist --sdist
+          fi
+      - name: 'Render PyPI README'
+        shell: bash
+        run: >-
+          python3 -m readme_renderer
+          './repo/${{ fromJSON(inputs.config).path-readme }}'
+          --output ./build/README.html
+      - name: 'Upload artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          path: ./build
+          name: ${{ fromJSON(inputs.config).artifact-name }}
+      - name: 'Test PyPI README'
+        # https://twine.readthedocs.io/en/stable/#twine-check
+        # https://packaging.python.org/en/latest/guides/making-a-pypi-friendly-readme/#validating-restructuredtext-markup
+        run: twine check ./build/dist/*
+
+  build-native:
+    name: 'Native Binary Distribution: ${{ matrix.os }}'
+    if: fromJSON(inputs.config).pure-python == false
+    runs-on: ${{ matrix.platform.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: ${{ fromJSON(inputs.config).cibw-matrix-platform }}
+        py-ver: ${{ fromJSON(inputs.config).cibw-matrix-python }}
+    steps:
+      - name: 'Checkout Repository: ${{ fromJSON(inputs.config).repository }} @ ${{ fromJSON(inputs.config).ref }}'
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ fromJSON(inputs.config).repository }}
+          fetch-depth: 0
+          ref: ${{ fromJSON(inputs.config).ref }}
+          path: repo
+      - name: 'Build wheel on ${{ matrix.os }}'
+        # https://cibuildwheel.readthedocs.io/en/stable/
+        # https://github.com/pypa/cibuildwheel
+        uses: pypa/cibuildwheel@v2.16
+        with:
+          package-dir: ./repo
+          output-dir: build/dist
+        env:
+          CIBW_BUILD: ${{ matrix.py-ver }}-${{ matrix.platform.cibw_platform }}
+          CIBW_BUILD_VERBOSITY: 2
+      - name: 'Upload wheel as artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          path: ./build
+          name: ${{ fromJSON(inputs.config).artifact-name }}

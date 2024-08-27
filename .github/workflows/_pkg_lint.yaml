@@ -1,0 +1,360 @@
+name: '[Callable]: Package - Lint'
+
+on:
+  workflow_call:
+    inputs:
+      config:
+        description: Configuration as a JSON string.
+        type: string
+        required: true
+
+jobs:
+
+  CodeQL:
+    # Run code scanning with GitHub CodeQL.
+    # Adapted from GitHub starter workflow, e.g.:
+    #  https://github.com/Armin-Ariamajd/PyPACKIT/new/main?filename=.github%2Fworkflows%2Fcodeql.yml&workflow_template=code-scanning%2Fcodeql
+    # Refs:
+    #  https://github.com/github/codeql-action
+    #  https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning-for-a-repository
+    name: 'CodeQL Security Scan'
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ['python']
+        # Available languages: 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby', 'swift'
+        # CodeQL language support: https://aka.ms/codeql-docs/language-support
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ fromJSON(inputs.config).repository }}
+          ref: ${{ fromJSON(inputs.config).ref }}
+          fetch-depth: 0
+
+      - name: 'Initialize CodeQL'
+        # Initializes the CodeQL tools for scanning.
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
+          # queries: security-extended,security-and-quality
+          # If you wish to specify custom queries, you can do so here or in a config file.
+          # By default, queries listed here will override any specified in a config file.
+          # Prefix the list here with "+" to use these queries and those in the config file.
+          # For more details on CodeQL's query packs, refer to:
+          #  https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
+
+      - name: Autobuild
+        # Autobuild attempts to build any compiled languages (C/C++, C#, Go, Java, or Swift).
+        # If this step fails, then you should remove it and run the build manually instead.
+        uses: github/codeql-action/autobuild@v2
+
+      - name: 'Perform CodeQL Analysis'
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: "/language:${{matrix.language}}"
+
+  dependency-review:
+    # This Action will scan dependency manifest files that change as part of a Pull Request,
+    # surfacing known-vulnerable versions of the packages declared or updated in the PR.
+    # Once installed, if the workflow run is marked as required,
+    # PRs introducing known-vulnerable packages will be blocked from merging
+    name: 'Dependency Review'
+    if: contains(fromJSON('["push", "pull_request"]'), github.event_name)
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ fromJSON(inputs.config).repository }}
+          ref: ${{ fromJSON(inputs.config).ref }}
+
+      - name: 'Review dependencies'
+        # Source repository: https://github.com/actions/dependency-review-action
+        # Public documentation: https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/about-dependency-review#dependency-review-enforcement
+        # https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/configuring-dependency-review
+        uses: actions/dependency-review-action@v3
+        with:
+          fail-on-severity: low
+          fail-on-scopes: development, runtime, unknown
+          comment-summary-in-pr: true
+          base-ref: ${{ fromJSON(inputs.config).ref-before }}
+          head-ref: ${{ fromJSON(inputs.config).ref }}
+
+  bandit:
+    # Refs:
+    #  https://github.com/marketplace/actions/bandit-scan
+    #  https://pypi.org/project/bandit/
+    #  https://bandit.readthedocs.io/en/latest/
+    #  https://github.com/PyCQA/bandit
+    name: 'bandit'
+    permissions:
+      security-events: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ fromJSON(inputs.config).repository }}
+          ref: ${{ fromJSON(inputs.config).ref }}
+          path: repo
+
+      - name: 'Setup Python'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+          cache: pip
+          cache-dependency-path: repo/.github/workflow_requirements/bandit.txt
+
+      - name: 'Setup Environment'
+        shell: bash
+        run: |
+          echo "::group::Install Dependencies"
+          python -m pip install -r repo/.github/workflow_requirements/bandit.txt
+          echo "::endgroup::"
+          echo "::group::Display pip environment"
+          python -m pip list
+          echo "::endgroup::"
+
+      - name: 'Run bandit'
+        shell: bash
+        run: |
+          echo "::group::Create temporary directory"
+          TEMP_REPORT_DIR="${{ github.workspace }}/reports/bandit"
+          mkdir -p $TEMP_REPORT_DIR
+          echo "::endgroup::"
+          
+          cd repo
+          echo "::group::Run bandit"
+          bandit \
+          ${{ fromJSON(inputs.config).path-source }} \
+          --configfile pyproject.toml \
+          --recursive \
+          --aggregate file \
+          --number 5 \
+          --severity-level medium \
+          --confidence-level medium \
+          --format sarif \
+          --output $TEMP_REPORT_DIR/report.sarif \
+          --verbose
+          echo "::endgroup::"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@main
+        with:
+          name: Lint Reports
+          path: ${{ github.workspace }}/reports/
+
+      - name: Upload SARIF file
+        # https://github.com/github/codeql-action/blob/main/upload-sarif/action.yml
+        # https://docs.github.com/en/code-security/code-scanning/integrating-with-code-scanning/uploading-a-sarif-file-to-github
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: ${{ github.workspace }}/reports/bandit/report.sarif
+          category: "bandit"
+
+  mypy:
+    name: 'MyPy (${{ matrix.os.name }}, Py ${{ matrix.python-version }})'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(inputs.config).os }}
+        python-version: ${{ fromJSON(inputs.config).python-versions }}
+    runs-on: ${{ matrix.os.runner }}
+    steps:
+      - name: 'Checkout Repository'
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ fromJSON(inputs.config).repository }}
+          ref: ${{ fromJSON(inputs.config).ref }}
+          fetch-depth: 0
+          path: repo
+
+      - name: 'Setup Python'
+        id: setup_python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ fromJSON(inputs.config).python-max-ver }}
+          cache: pip
+          cache-dependency-path: repo/.github/workflow_requirements/mypy.txt
+
+      - name: 'Load MyPy Cache'
+        uses: actions/cache@v3
+        with:
+          path: ./cache
+          key: >-
+            mypy
+            -${{ matrix.runner }}
+            -${{ matrix.python-version }}
+            -${{ inputs.ref-before }}
+            -${{ hashFiles('repo/.github/workflow_requirements/mypy.txt') }}
+
+      - name: 'Setup Environment'
+        shell: bash
+        run: |
+          echo "::group::Upgrade pip"
+          python3 -m pip install --upgrade pip
+          echo "::endgroup::"
+
+          echo "::group::Install package"
+          python3 -m pip install ./repo/
+          echo "::endgroup::"
+
+          echo "::group::Install mypy"
+          python3 -m pip install -r ./repo/.github/workflow_requirements/mypy.txt
+          echo "::endgroup::"
+
+          echo "::group::Display pip environment"
+          python3 -m pip list
+          echo "::endgroup::"
+
+      - name: 'Run MyPy'
+        shell: bash
+        run: |
+          echo "::group::Create temporary directory"
+          TEMP_REPORT_DIR="${{ github.workspace }}/reports/mypy/${{ runner.os }}/py_${{ matrix.python-version }}"
+          mkdir -p $TEMP_REPORT_DIR
+          echo "::endgroup::"
+          
+          cd repo
+          echo "::group::Run mypy"
+          mypy \
+          --python-version ${{ matrix.python-version }} \
+          --config-file pyproject.toml \
+          --any-exprs-report $TEMP_REPORT_DIR \
+          --html-report $TEMP_REPORT_DIR \
+          --linecount-report $TEMP_REPORT_DIR \
+          --linecoverage-report $TEMP_REPORT_DIR \
+          --lineprecision-report $TEMP_REPORT_DIR \
+          --txt-report $TEMP_REPORT_DIR \
+          --xml-report $TEMP_REPORT_DIR
+          echo "::endgroup::"
+
+      - name: 'Upload reports'
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: Lint Reports
+          path: ${{ github.workspace }}/reports/
+
+#  pylint:
+#    name: 'PyLint (${{ matrix.os.name }})'
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        os: ${{ fromJSON(inputs.config).os }}
+#    runs-on: ${{ matrix.os.runner }}
+#    steps:
+#      - name: 'Checkout repository'
+#        uses: actions/checkout@v4
+#        with:
+#          repository: ${{ fromJSON(inputs.config).repository }}
+#          ref: ${{ fromJSON(inputs.config).ref }}
+#          fetch-depth: 0
+#          path: repo
+#
+#      - name: 'Setup Python'
+#        id: setup_python
+#        uses: actions/setup-python@v5
+#        with:
+#          python-version: ${{ fromJSON(inputs.config).python-max-ver }}
+#          cache: pip
+#          cache-dependency-path: repo/.github/workflow_requirements/pylint.txt
+#
+#      - name: 'Setup MSYS2'
+#        if: runner.os == 'Windows'
+#        uses: msys2/setup-msys2@v2
+#        with:
+#          update: true
+#          install: mingw-w64-x86_64-enchant
+#
+#      - name: 'Install Extra Requirements'
+#        shell: bash
+#        run: |
+#          if [ "$RUNNER_OS" == "Linux" ]; then
+#              sudo apt update
+#              sudo apt install -y libenchant-2-2
+#              sudo apt install -y graphviz
+#          elif [ "$RUNNER_OS" == "Windows" ]; then
+#              echo "Requirement already satisfied."
+#          elif [ "$RUNNER_OS" == "macOS" ]; then
+#              brew update-reset
+#              brew install enchant
+#          else
+#              echo "$RUNNER_OS not supported"
+#              exit 1
+#          fi
+#
+#      - name: 'Setup Environment'
+#        shell: bash
+#        run: |
+#          echo "::group::Upgrade pip"
+#          python3 -m pip install --upgrade pip
+#          echo "::endgroup::"
+#
+#          echo "::group::Install package"
+#          python3 -m pip install ./repo
+#          echo "::endgroup::"
+#
+#          echo "::group::Install pylint"
+#          python3 -m pip install -r ./repo/.github/workflow_requirements/pylint.txt
+#          echo "::endgroup::"
+#
+#          echo "::group::Display pip environment"
+#          python3 -m pip list
+#          echo "::endgroup::"
+#
+#      - name: 'Run Pylint'
+#        shell: bash
+#        run: |
+#          echo "::group::Create temporary directory"
+#          TEMP_DIR=${{ github.workspace }}/reports/pylint/${{ runner.os }}
+#          mkdir -p $TEMP_DIR
+#          echo "::endgroup::"
+#
+#          cd repo
+#          echo "::group::Run pylint"
+#          pylint \
+#          ${{ fromJSON(inputs.config).package-name }} \
+#          --rcfile pyproject.toml \
+#          --import-graph $TEMP_DIR/import_graph_total.svg \
+#          --int-import-graph $TEMP_DIR/import_graph_internal.svg \
+#          --ext-import-graph $TEMP_DIR/import_graph_external.svg \
+#          --output-format=colorized,text:$TEMP_DIR/report_text.txt,json:$TEMP_DIR/report_json.json,parseable:$TEMP_DIR/report_parseable.txt,msvs:$TEMP_DIR/report_msvs.txt \
+#          -j 0
+#          echo "::endgroup::"
+#
+#      - name: 'Create diagrams'
+#        # https://pylint.readthedocs.io/en/latest/pyreverse.html
+#        if: always()
+#        shell: bash
+#        run: |
+#          echo "::group::Create temporary directory"
+#          TEMP_DIR=${{ github.workspace }}/reports/pyreverse/${{ runner.os }}
+#          mkdir -p $TEMP_DIR
+#          echo "::endgroup::"
+#
+#          cd repo
+#          echo "::group::Run pyreverse"
+#          pyreverse \
+#          --source-roots ${{ fromJSON(inputs.config).path-source }} \
+#          --output-directory $TEMP_DIR \
+#          --output html \
+#          --module-names y \
+#          --colorized \
+#          --max-color-depth 5 \
+#          ${{ fromJSON(inputs.config).package-name }}
+#          echo "::endgroup::"
+#
+#      - name: 'Upload Pylint reports'
+#        if: always()
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: Lint Reports
+#          path: ${{ github.workspace }}/reports/
