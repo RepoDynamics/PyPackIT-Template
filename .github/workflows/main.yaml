@@ -156,20 +156,18 @@ jobs:
 #      metadata: ${{ needs.init.outputs.metadata }}
 #      ref: ${{ fromJSON(needs.init.outputs.config).checkout.ref }}
 #      repository: ${{ fromJSON(needs.init.outputs.config).checkout.repository }}
-
-#  publish-testpypi:
-#    name: 'Package Publish'
-#    needs: [init, build, test, lint]
-#    if: fromJSON(needs.init.outputs.run).publish-testpypi  # fromJSON(needs.init.outputs.config).run.package_publish_testpypi
-#    permissions:
-#      id-token: write
-#    uses: ./.github/workflows/_pkg_publish.yaml
-#    with:
-#      config: ${{ needs.init.outputs.publish-testpypi }}
-##      platform: TestPyPI
-##      download-url: ${{ fromJSON(needs.init.outputs.config).package.download_url_testpypi }}
-##      upload-url: ${{ fromJSON(needs.init.outputs.config).package.upload_url_testpypi }}
-#
+  publish-testpypi:
+    name: 'Package Publish'
+    needs: [init, build, test, lint]
+    if: fromJSON(needs.init.outputs.run).publish-testpypi  # fromJSON(needs.init.outputs.config).run.package_publish_testpypi
+    permissions:
+      id-token: write
+    uses: ./.github/workflows/_pkg_publish.yaml
+    with:
+      config: ${{ needs.init.outputs.publish-testpypi }}
+#      platform: TestPyPI
+#      download-url: ${{ fromJSON(needs.init.outputs.config).package.download_url_testpypi }}
+#      upload-url: ${{ fromJSON(needs.init.outputs.config).package.upload_url_testpypi }}
 #  test-testpypi:
 #    name: 'Package Test: TestPyPI'
 #    needs: [init, publish-testpypi]
