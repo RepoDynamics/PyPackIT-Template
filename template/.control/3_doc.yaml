@@ -1,0 +1,689 @@
+theme:
+  color:
+    primary:
+      light: '#0F3460'
+      dark: '#3A98B9'
+    secondary:
+      light: '#562B08'
+      dark: '#E3651D'
+  footer:
+    - class: line
+    - class: badges
+      default:
+        params_light:
+          style: for-the-badge
+      content:
+        - service: dynamic
+          args:
+            url: ${{ control.url }}
+            query: '$.copyright.notice'
+            prefix: '©'
+          params_light:
+            label: ${{ name }}
+            color: ${{ theme.color.primary.light }}
+            logo: ${{ theme.path }}/${{ theme.logo.icon }}
+            logo_type: file
+          params_dark:
+            color: ${{ theme.color.primary.dark }}
+            logo: ${{ theme.path }}/${{ theme.logo.icon }}
+            logo_type: file
+          href: ${{ web.url.home }}
+          title: '${{ name }}: ${{ copyright.notice }}'
+          alt: ${{ name }}
+          align: left
+        - service: dynamic
+          args:
+            url: ${{ control.url }}
+            query: '$.license.id'
+          params_light:
+            label: License
+            color: ${{ theme.color.secondary.light }}
+          params_dark:
+            color: ${{ theme.color.secondary.dark }}
+          href: ${{ license.url }}
+          title: ${{ name }} is licensed under the ${{ license.name }}
+          alt: ${{ license.name }}
+          align: left
+        - service: repodynamics
+          endpoint: pypackit
+readme:
+  main:
+    path: README.md
+    content: &readme_content
+      - class: image
+        src: ${{ repo.url.raw }}/${{ theme.path }}/${{ theme.logo.full.light }}
+        src_dark: ${{ repo.url.raw }}/${{ theme.path }}/${{ theme.logo.full.dark }}
+        width: 80%
+        href: ${{ web.url.home }}
+        title: Welcome to ${{ name }}! Click to visit our website and learn more.
+        alt: '${{ name }}: ${{ title }}'
+        align_div: center
+      - class: line
+        width: 80%
+        align_div: center
+      - class: static_badges
+        align_div: center
+        space: 2
+        default:
+          params_light:
+            style: for-the-badge
+            color: ${{ theme.color.primary.light }}
+          params_dark:
+            color: ${{ theme.color.primary.dark }}
+          height: 33px
+        content:
+          - message: Intro
+            href: ${{ web.page.intro.url }}
+            title: Introduction and Background
+          - message: Manual
+            href: ${{ web.page.manual.url }}
+            title: User Manual
+          - message: News
+            href: ${{ web.page.blog.url }}
+            title: Latest News and Releases
+          - message: Contribute
+            href: ${{ web.page.contribute.url }}
+            title: How to Contribute
+          - message: About
+            href: ${{ web.page.about.url }}
+            title: About the Project
+          - message: Help
+            href: ${{ web.page.help.url }}
+            title: Get Help and Support
+      - class: line
+        width: 100%
+      - class: paragraph
+        align: justify
+        text: ${{ abstract }}
+        styles:
+          - word: ${{ name }}
+            strong: true
+            emphasis: true
+            url: ${{ web.url.home }}
+            count: 1
+      - class: static_badges
+        content:
+          - message: 'Keywords:'
+            params_light:
+              style: plastic
+              color: 2c2e30
+            params_dark:
+              color: 2c2e30
+            height: 23px
+      - '&nbsp;&nbsp;'
+      - class: static_badges
+        space: 1
+        default:
+          height: 23px
+          params_light:
+            color: [ '${{ theme.color.primary.light }}', '${{ theme.color.secondary.light }}' ]
+          params_dark:
+            color: [ '${{ theme.color.primary.dark }}', '${{ theme.color.secondary.dark }}' ]
+        content: ${{ keywords }}
+      - class: line
+        width: 100%
+      - class: static_badges
+        align_div: center
+        space: 2
+        default:
+          params_light:
+            style: for-the-badge
+            color: ${{ theme.color.secondary.light }}
+          params_dark:
+            color: ${{ theme.color.secondary.dark }}
+          height: 33px
+        content:
+          - message: Overview
+            href: ${{ web.page.overview.url }}
+            title: Project Overview
+          - message: Install
+            href: ${{ web.page.install.url }}
+            title: Installation Instructions
+          - message: Releases
+            href: ${{ web.page.blog_category_release.url }}
+            title: Release Notes and Changelogs
+          - message: Contact
+            href: ${{ web.page.contact.url }}
+            title: Contact Information
+      - class: line
+        width: 100%
+      - class: heading
+        level: 2
+        align_div: center
+        content: Highlights
+      - class: highlights
+        align: justify
+        badge_default:
+          params_light:
+            style: for-the-badge
+            color: [ '${{ theme.color.primary.light }}', '${{ theme.color.secondary.light }}' ]
+          params_dark:
+            color: [ '${{ theme.color.primary.dark }}', '${{ theme.color.secondary.dark }}' ]
+          height: 30px
+          align: left
+        content: ${{ highlights }}
+#  dir:
+#    .github:
+#      content: |
+#        # GitHub Directory
+#
+#        ## Workflows
+#        The `.github/workflows` directory contains GitHub Actions
+#        [workflow definition files](https://docs.github.com/en/actions/using-workflows/about-workflows).
+#    .github/DISCUSSION_TEMPLATE:
+#      content: |
+#        # GitHub Discussion Category Forms
+#
+#        > [!IMPORTANT]
+#        > Do not manually modify the contents of this directory.
+#          All files in this directory are automatically maintained; do not modify them manually.
+#          They can be managed through the [`user/discussion.yaml`](${{ dir.control }}/user/discussion.yaml)
+#          configuration file of the repository's [control center](${{ dir.control }}).
+#
+#        This directory contains templates for GitHub discussion category forms,
+#        which are used to customize the templates
+#
+#        It encourages community members to include specific, structured information
+#        in their discussions by using customizable web form fields.
+#
+#        To be recognized by GitHub, discussion category forms must be stored in the directory `/.github/DISCUSSION_TEMPLATE/`
+#        (i.e. this directory).
+#
+#        Each YAML file defines a form for a specific discussion category, indicated by the
+#        filename, which must correspond with the slug for one of the discussion categories.
+#        For example, the template for the "New Announcements" category should be stored in
+#        `.github/DISCUSSION_TEMPLATE/new-announcements.yml`.
+#
+#    .github/ISSUE_TEMPLATE:
+#      content: |
+#        # GitHub Issues Settings
+#        This directory contains templates and configurations used when an issue is opened in the repository.
+#
+#        ## Templates
+#        The issues templates use the GitHub's [issue forms](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository#creating-issue-forms)
+#        to create customizable web form fields. Each `.yml` file (other than `config.yml`) provides a template for
+#        a specific issue type. The issue forms use the YAML format, with a series of defined [top-level keys](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms#top-level-syntax)
+#        such as `name`, `description` and `labels`, and a [body syntax](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-githubs-form-schema)
+#        to define the form fields.
+#
+#        Any YAML file created in this directory using the specified syntax will be automatically added to the list of possible
+#        issue forms that users can select from when opening a new issue in the repository.
+#
+#
+#        ## Configurations
+#        The [config.yml](../../.meta/config/issues_template_chooser.yaml) file contains the configurations for the
+#        [template chooser](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository#configuring-the-template-chooser),
+#        i.e. the landing page of the repository's 'Issues' section.
+#
+#        ### Options
+#        - `blank_issues_enabled`: A boolean value defining whether free-form issues can be opened by users.
+#        - `contact_links`: An array of dictionaries, defining additional external links for opening issues.
+#        These options will be displayed alongside the available templates in the 'Issues' section of the repository.
+#
+#        ## References
+#        - [GitHub Documentation](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/about-issue-and-pull-request-templates)
+#    .github/PULL_REQUEST_TEMPLATE:
+#      content: |
+#        # GitHub Pull Requests Templates
+#        This directory contains additional templates for pull requests.
+#
+#        By default, the template defined at [./github/pull_request_template.md](./github/pull_request_template.md)
+#        is used when opening a pull request. To use the extra templates in this directory,
+#        the `template` [query parameter](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/using-query-parameters-to-create-a-pull-request)
+#        must be added to the URL of the pull request form, defining the name of the template to use.
+#        For example, to use a template file named `my_custom_template.md`, add the following query string at the end of the
+#        URL: `?template=my_custom_template.md`. A full URL may e.g. look like this:
+#        https://github.com/my-username/my-repo/compare/main...my-branch?template=my_custom_template.md
+#
+#        ## Notes
+#        - Pull request template filenames are not case-sensitive, and can have an extension such as `.md` or `.txt`.
+#        - The YAML syntax used for issue forms is not supported for pull requests templates.
+#
+#        ## References
+#        - [GitHub Documentation](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/creating-a-pull-request-template-for-your-repository)
+health:
+  code_of_conduct:
+    path: CODE_OF_CONDUCT.md
+    content:
+      - class: covenant
+        contact_name: ${{ maintainer.code_of_conduct.name.full }}
+        contact_url: ${{ maintainer.code_of_conduct.email.url }}
+  contributing:
+    path: CONTRIBUTING.md
+    content:
+      - class: heading
+        level: 1
+        content: ${{ name }} Contributing Guidelines
+      - class: paragraph
+        align: justify
+        text: |
+          Welcome to the <em>${{name}}</em> community!
+          We are excited to have you here,
+          and grateful that you are considering contributing.
+          ${{name}} is a free and open-source project that evolves with the needs of its users,
+          and can only grow through the help of great members like you.
+      - class: heading
+        level: 2
+        content: How To Contribute
+      - class: paragraph
+        align: justify
+        text: |
+          To keep all our project documentation organized and easy to find, the complete
+          <a href="${{ web.page.contribute.url }}">contribution guide</a> is hosted on our website.
+  security:
+    path: SECURITY.md
+    content:
+      - class: heading
+        level: 1
+        content: Security Policy
+web:
+  sphinx:
+    config:
+      trim_footnote_reference_space: true
+      math_eqref_format: Eq. {number}
+      math_number_all: true
+      math_numfig: true
+      math_numsep: .
+      nitpicky: true
+      maximum_signature_line_length: 80
+      root_doc: index
+      templates_path:
+        - _templates  # Ref: https://www.sphinx-doc.org/en/master/development/templating.html
+      show_warning_types: true
+      html_title: ${{ name }}
+      html_short_title: ${{ name }}
+      html_baseurl: ${{ web.url.base }}
+      html_favicon: ${{ web.path.to_root }}/${{ theme.path }}/${{ theme.logo.icon }}
+      html_static_path:
+        - _static
+        - '${{ web.path.to_root }}/${{ theme.path }}'
+        - '${{ web.path.to_root }}/${{ theme.path }}/${{ theme.logo.simple.light }}'
+        - '${{ web.path.to_root }}/${{ theme.path }}/${{ theme.logo.simple.dark }}'
+      html_secnumber_suffix: ". "
+      html_extra_path: [ 404.html ]
+      html_use_opensearch: ${{ web.url.base }}
+      html_show_sphinx: false
+      html_math_renderer: mathjax
+      html_context:
+        pp_title_sep: ${{ web.sphinx.config.html_secnumber_suffix }}
+      html_last_updated_fmt: '%b %d, %Y'
+      latex_engine: lualatex
+      latex_elements:
+        papersize: a4paper
+        pointsize: 11pt
+        figure_align: htbp
+        fontpkg: |
+          \setmainfont{DejaVu Serif}
+          \setsansfont{DejaVu Sans}
+          \setmonofont{DejaVu Sans Mono}
+        preamble: |
+          \usepackage[titles]{tocloft}
+          \usepackage{fontspec}
+          \cftsetpnumwidth {1.25cm}\cftsetrmarg{1.5cm}
+          \setlength{\cftchapnumwidth}{0.75cm}
+          \setlength{\cftsecindent}{\cftchapnumwidth}
+          \setlength{\cftsecnumwidth}{1.25cm}
+        fncychap: '\usepackage[Bjornstrup]{fncychap}'
+        printindex: '\footnotesize\raggedright\printindex'
+      latex_theme: manual
+      latex_show_urls: footnote
+      latex_show_pagerefs: true
+      latex_logo: _static/${{ theme.logo.full.raster }}
+      python_display_short_literal_types: true
+      python_maximum_signature_line_length: 80
+    extension:
+      autosummary:
+        dependency:
+          import_name: sphinx.ext.autosummary
+          url:
+            docs: https://www.sphinx-doc.org/en/master/usage/extensions/autosummary.html
+        config:
+          autosummary_generate: true
+          autosummary_generate_overwrite: true
+          autosummary_imported_members: false
+          autosummary_ignore_module_all: false
+      extlinks:
+        dependency:
+          import_name: sphinx.ext.extlinks
+      duration:
+        dependency:
+          import_name: sphinx.ext.duration
+      doctest:
+        dependency:
+          import_name: sphinx.ext.doctest
+      autodoc:
+        dependency:
+          import_name: sphinx.ext.autodoc
+      mathjax:
+        dependency:
+          import_name: sphinx.ext.mathjax
+      viewcode:
+        dependency:
+          import_name: sphinx.ext.viewcode
+      intersphinx:
+        dependency:
+          import_name: sphinx.ext.intersphinx
+          description: Adding links to external documentation.
+          url:
+            docs: https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html
+        config:
+          intersphinx_mapping:
+            python: [ 'https://docs.python.org/3/', null ]
+            numpy: [ 'https://numpy.org/doc/stable/', null ]
+            matplotlib: [ 'https://matplotlib.org/stable/', null ]
+  theme:
+    config:
+      # https://pydata-sphinx-theme.readthedocs.io/en/stable/user_guide/layout.html#references
+      html_theme_options:
+        navbar_start: [ navbar-logo ]  # header left
+        navbar_center: [ navbar-nav ]  # header center
+        navbar_end: [ navbar-icon-links, theme-switcher ]  # header right
+        navbar_persistent: [ search-button ]  # header right persistent
+        navbar_align: left  # alignment of `navbar_center`: {"left", "right", "content"}
+        article_header_start: [ breadcrumbs ]  # article header left
+        article_header_end: [ ]  # article header right
+        primary_sidebar_end: [ ]  # left sidebar bottom
+        secondary_sidebar_items:
+          - "page-toc"
+          - "last-updated"
+          - "edit-this-page"
+          - "indices"
+        article_footer_items: [ ]
+        show_prev_next: True
+        content_footer_items: [ ]
+        footer_start: [ "version", "copyright", "pypackit_ver" ]  # footer left
+        footer_end: [ "quicklinks" ]  # footer right
+        show_nav_level: 2
+        navigation_depth: 5
+        show_toc_level: 3
+        header_links_before_dropdown: 7
+        icon_links_label: "External links"
+        use_edit_page_button: true
+        announcement: ${{ announcement.url }}
+        search_bar_text: Search ${{ name }}
+        logo:
+          image_light: _static/simple_light.svg
+          image_dark: _static/simple_dark.svg
+          alt_text: ${{ name }}
+        pygment_light_style: default  # Code highlighting color themes. See: https://pygments.org/styles/
+        pygment_dark_style: monokai   # https://pydata-sphinx-theme.readthedocs.io/en/stable/user_guide/styling.html#configure-pygments-theme
+        sidebarwidth: 270
+        sidebar_includehidden: True
+        icon_links:
+          - name: PyPI Distribution
+            icon: fa-brands fa-python
+            url: ${{ pkg.pypi.url.home }}
+          - name: Source Repository
+            icon: fa-brands fa-github
+            url: ${{ repo.url.home }}
+          - name: Issues
+            icon: fa-regular fa-circle-dot
+            url: ${{ repo.url.issues.home }}
+          - name: Pull Requests
+            icon: fa-solid fa-code-pull-request
+            url: ${{ repo.url.pulls.home }}
+          - name: Discussions
+            icon: fa-solid fa-comments
+            url: ${{ repo.url.discussions.home }}
+          - name: License
+            icon: fa-solid fa-copyright
+            url: ${{ license.url }}
+      html_context:
+        github_user: ${{ team.owner.github.id }}
+        github_repo: ${{ repo.name }}
+        github_version: ${{ repo.default_branch }}
+        doc_path: ${{ web.path.source }}
+        default_mode: auto  # Default theme mode: {'light', 'dark', 'auto'}
+      html_sidebars:
+        "**": [ sidebar-nav-bs ]
+  extension:
+    myst:
+      dependency:
+        import_name: myst_parser
+        description: Adding MyST Markdown functionalities to Sphinx.
+        url:
+          source: https://github.com/executablebooks/MyST-Parser
+          docs: https://myst-parser.readthedocs.io/
+          docs_config:
+            url: https://myst-parser.readthedocs.io/en/latest/configuration.html
+          docs_extensions:
+            url: https://myst-parser.readthedocs.io/en/latest/syntax/optional.html
+        pip:
+          spec: myst-parser[linkify] == 3.0.1
+        conda:
+          spec: myst-parser = 3.0.1
+          channel: conda-forge
+      config:
+        myst_enable_extensions:
+          - amsmath
+          - attrs_inline
+          - attrs_block
+          - colon_fence
+          - deflist
+          - dollarmath
+          - fieldlist
+          - html_admonition
+          - html_image
+          - linkify
+          - replacements
+          - smartquotes
+          - substitution
+          - tasklist
+        myst_links_external_new_tab: true
+        myst_heading_anchors: 6
+        myst_sub_delimiters:
+          - "|"
+          - "|"
+    design:
+      dependency:
+        import_name: sphinx_design
+        description: Adding responsive web components, such as grids, cards, tabs, etc.
+        url:
+          docs: https://sphinx-design.readthedocs.io/
+          source: https://github.com/executablebooks/sphinx-design
+        pip:
+          spec: sphinx-design == 0.6.0
+        conda:
+          spec: sphinx-design = 0.6.0
+          channel: conda-forge
+      config:
+        sd_fontawesome_latex: true
+    autodoc2:
+      dependency:
+        import_name: autodoc2
+        description: Automatically generating Python API documentation from docstrings.
+        url:
+          docs: https://sphinx-autodoc2.readthedocs.io/
+          source: https://github.com/sphinx-extensions2/sphinx-autodoc2
+        pip:
+          spec: sphinx-autodoc2 == 0.5.0
+        conda:
+          spec: sphinx-autodoc2 = 0.5.0
+          channel: conda-forge
+      config:
+        autodoc2_packages: [ '${{ web.path.to_root }}/${{ pkg.path.import }}' ]
+        autodoc2_output_dir: api
+        autodoc2_render_plugin: myst
+    ablog:
+      dependency:
+        import_name: ablog
+        description: Adding a news blog to the website.
+        url:
+          docs: https://ablog.readthedocs.io/
+          source: https://github.com/sunpy/ablog
+          docs_config:
+            url: https://ablog.readthedocs.io/en/stable/manual/ablog-configuration-options.html
+        pip:
+          spec: ablog == 0.11.10
+        conda:
+          spec: ablog = 0.11.10
+          channel: conda-forge
+      config:
+        html_sidebars:
+          "${{ web.extension.ablog.config.blog_path }}/**":
+            - ablog/postcard.html
+            - ablog/recentposts.html
+            - ablog/tagcloud.html
+            - ablog/categories.html
+            - ablog/archives.html
+        blog_path: ${{ web.page.blog.path }}
+        blog_title: ${{ name }} News
+        blog_baseurl: ${{ web.url.base }}
+        blog_default_author: owner
+        post_auto_image: 1
+        post_always_section: true
+        blog_post_pattern:
+          - ${{ web.extension.ablog.config.blog_path }}/post/*.rst
+          - ${{ web.extension.ablog.config.blog_path }}/post/*.md
+        blog_feed_archives: true
+        fontawesome_included: true
+    copy_button:
+      dependency:
+        import_name: sphinx_copybutton
+        description: Adding a copy button to code blocks.
+        url:
+          docs: https://sphinx-copybutton.readthedocs.io/
+          source: https://github.com/executablebooks/sphinx-copybutton
+        pip:
+          spec: sphinx-copybutton == 0.5.2
+        conda:
+          spec: sphinx-copybutton = 0.5.2
+          channel: conda-forge
+    last_update:
+      dependency:
+        import_name: sphinx_last_updated_by_git
+        pip:
+          spec: sphinx-last-updated-by-git == 0.3.7
+        description: Adding page-specific last-updated dates to each page.
+        url:
+          docs: https://sphinx-last-updated-by-git.readthedocs.io/
+          source: https://github.com/mgeier/sphinx-last-updated-by-git
+    opengraph:
+      dependency:
+        import_name: sphinxext.opengraph
+        description: |
+          Generating [Open Graph](https://ogp.me/) metadata for each page.
+        url:
+          docs: https://sphinxext-opengraph.readthedocs.io/
+          source: https://github.com/wpilibsuite/sphinxext-opengraph/
+        pip:
+          spec: sphinxext-opengraph == 0.9.1
+        conda:
+          spec: sphinxext-opengraph = 0.9.1
+          channel: conda-forge
+      config:
+        ogp_site_url: ${{ web.url.base }}
+        ogp_social_cards:
+          image: ${{ theme.path }}/img/ogp.png  #TODO
+          line_color: ${{ theme.color.primary.light }}
+    bibtex:
+      dependency:
+        import_name: sphinxcontrib.bibtex
+        description: Adding BibTeX-style citations.
+        url:
+          docs: https://sphinxcontrib-bibtex.readthedocs.io/
+          source: https://github.com/mcmtroffaes/sphinxcontrib-bibtex
+        pip:
+          spec: sphinxcontrib-bibtex == 2.6.2
+        conda:
+          spec: sphinxcontrib-bibtex = 2.6.2
+          channel: conda-forge
+      config:
+        bibtex_bibfiles: [refs.bib]
+        bibtex_default_style: plain
+        bibtex_reference_style: label
+    toggle_button:
+      dependency:
+        import_name: sphinx_togglebutton
+        description: Adding toggle buttons to admonitions and other content.
+        url:
+          docs: https://sphinx-togglebutton.readthedocs.io/
+          source: https://github.com/executablebooks/sphinx-togglebutton
+        pip:
+          spec: sphinx-togglebutton == 0.3.2
+        conda:
+          spec: sphinx-togglebutton = 0.3.2
+          channel: conda-forge
+    mermaid:
+      dependency:
+        import_name: sphinxcontrib.mermaid
+        description: Adding Mermaid diagrams and charts.
+        url:
+          docs: https://sphinxcontrib-mermaid-demo.readthedocs.io/en/stable/
+          source: https://github.com/mgaitan/sphinxcontrib-mermaid
+        pip:
+          spec: sphinxcontrib-mermaid == 0.9.2
+        conda:
+          spec: sphinxcontrib-mermaid = 0.9.2
+          channel: conda-forge
+    svg2pdf:
+      dependency:
+        import_name: sphinxcontrib.rsvgconverter
+        description: Converting SVG images to PNG for LaTeX.
+        pip:
+          spec: sphinxcontrib-svg2pdfconverter[CairoSVG] == 1.2.2
+        url:
+          source: https://github.com/missinglinkelectronics/sphinxcontrib-svg2pdfconverter
+        notes: |
+          This doesn't work on `latex_logo`;
+          see [nbsphinx](https://nbsphinx.readthedocs.io/en/latest/markdown-cells.html).
+  env:
+    file:
+      conda:
+        name: ${{ repo.name }}-docs
+        path: ${{ web.path.root }}/environment.yaml
+      pip:
+        path: ${{ web.path.root }}/requirements.txt
+    dependency:
+      linkify:
+        import_name: linkify_it
+        description: |
+          Linkify extension for MyST Markdown to automatically convert URLs to hyperlinks.
+        url:
+          docs: https://myst-parser.readthedocs.io/en/latest/syntax/optional.html#linkify
+        pip:
+          spec: linkify-it-py == 2.0.3
+        conda:
+          spec: linkify-it-py == 2.0.3
+          channel: conda-forge
+      gittidy:
+        import_name: gittidy
+        description: |
+          Git API to automatically retrieve project version from tags during builds.
+        url:
+          docs: https://gittidy.repodynamics.com
+        pip:
+          spec: gittidy
+      versionman:
+        import_name: versionman
+        description: |
+          Version management utilities to automatically find the latest version
+          from git tags during build.
+        url:
+          docs: https://versionman.repodynamics.com
+        pip:
+          spec: versionman
+      autobuild:
+        import_name: sphinx-autobuild
+        description: Automatically rebuilding the documentation when changes are made.
+        notes: |
+          This is added to the `Makefile` of Sphinx under the `livehtml` target,
+          meaning that you can run `make livehtml` in the website directory
+          to start the autobuild server.
+        url:
+          source: https://github.com/sphinx-doc/sphinx-autobuild
+        pip:
+          spec: sphinx-autobuild >= 2024.4.16
+      librsvg:
+        import_name: librsvg
+        description: |
+          Library for rendering SVG files and using them 
+          in PDF (via LaTeX) builds done by latexmk.
+        conda:
+          spec: librsvg
+          channel: conda-forge
+        url:
+          docs: https://wiki.gnome.org/Projects/LibRsvg
+          source: https://gitlab.gnome.org/GNOME/librsvg
+announcement:
+  path: ${{ web.path.root }}/announcement.html
