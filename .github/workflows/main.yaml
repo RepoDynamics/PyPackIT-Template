@@ -178,18 +178,18 @@ jobs:
 #      config: ${{ needs.init.outputs.config }}
 #      metadata: ${{ needs.init.outputs.metadata }}
 #      package-source: TestPyPI
-#  publish-pypi:
-#    name: 'Package Publish'
-#    needs: [init, test-testpypi]
-#    if: fromJSON(needs.init.outputs.run).publish-pypi  # ${{ !failure() && fromJSON(needs.init.outputs.config).run.package_publish_pypi }}
-#    permissions:
-#      id-token: write
-#    uses: ./.github/workflows/_pkg_publish.yaml
-#    with:
-#      config: ${{ needs.init.outputs.publish-pypi }}
-##      platform: PyPI
-##      download-url: ${{ fromJSON(needs.init.outputs.config).package.download_url_pypi }}
-##      upload-url: ${{ fromJSON(needs.init.outputs.config).package.upload_url_pypi }}
+  publish-pypi:
+    name: 'Package Publish'
+    needs: [init, test-testpypi]
+    if: fromJSON(needs.init.outputs.run).publish-pypi  # ${{ !failure() && fromJSON(needs.init.outputs.config).run.package_publish_pypi }}
+    permissions:
+      id-token: write
+    uses: ./.github/workflows/_pkg_publish.yaml
+    with:
+      config: ${{ needs.init.outputs.publish-pypi }}
+#      platform: PyPI
+#      download-url: ${{ fromJSON(needs.init.outputs.config).package.download_url_pypi }}
+#      upload-url: ${{ fromJSON(needs.init.outputs.config).package.upload_url_pypi }}
 #
 #  test-pypi:
 #    name: 'Package Test: PyPI'
