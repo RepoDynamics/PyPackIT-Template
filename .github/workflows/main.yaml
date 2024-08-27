@@ -119,22 +119,22 @@ jobs:
           path-pkg: ${{ matrix.config.path-pkg }}
           artifact-name: ${{ matrix.config.artifact-name }}
           deploy: ${{ matrix.config.deploy }}
-#  lint:
-#    name: Package Lint
-#    needs: init
-#    if: fromJSON(needs.init.outputs.run).lint
-#    permissions:
-#      pull-requests: write
-#      security-events: write
-#      actions: read
-#      contents: read
-#    strategy:
-#      fail-fast: false
-#      matrix:
-#        config: ${{ fromJSON(needs.init.outputs.lint) }}
-#    uses: ./.github/workflows/_pkg_lint.yaml
-#    with:
-#      config: ${{ toJSON(matrix.config) }}
+  lint:
+    name: Package Lint
+    needs: init
+    if: fromJSON(needs.init.outputs.run).lint
+    permissions:
+      pull-requests: write
+      security-events: write
+      actions: read
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        config: ${{ fromJSON(needs.init.outputs.lint) }}
+    uses: ./.github/workflows/_pkg_lint.yaml
+    with:
+      config: ${{ toJSON(matrix.config) }}
 #  test:
 #    name: Package Test
 #    needs: init
