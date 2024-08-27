@@ -191,16 +191,16 @@ jobs:
 #      download-url: ${{ fromJSON(needs.init.outputs.config).package.download_url_pypi }}
 #      upload-url: ${{ fromJSON(needs.init.outputs.config).package.upload_url_pypi }}
 #
-#  test-pypi:
-#    name: 'Package Test: PyPI'
-#    needs: [init, publish-pypi]
-#    if: fromJSON(needs.init.outputs.run).test-pypi  # ${{ !failure() && fromJSON(needs.init.outputs.config).run.package_test_pypi }}
-#    uses: ./.github/workflows/_pkg_test.yaml
-#    with:
-#      config: ${{ needs.init.outputs.test-pypi }}
-##      config: ${{ needs.init.outputs.config }}
-##      metadata: ${{ needs.init.outputs.metadata }}
-##      package-source: PyPI
+  test-pypi:
+    name: 'Package Test: PyPI'
+    needs: [init, publish-pypi]
+    if: fromJSON(needs.init.outputs.run).test-pypi  # ${{ !failure() && fromJSON(needs.init.outputs.config).run.package_test_pypi }}
+    uses: ./.github/workflows/_pkg_test.yaml
+    with:
+      config: ${{ needs.init.outputs.test-pypi }}
+#      config: ${{ needs.init.outputs.config }}
+#      metadata: ${{ needs.init.outputs.metadata }}
+#      package-source: PyPI
 #
 #  finalize:
 #    name: 'Finalize'
