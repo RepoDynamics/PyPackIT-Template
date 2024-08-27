@@ -168,17 +168,16 @@ jobs:
 #      platform: TestPyPI
 #      download-url: ${{ fromJSON(needs.init.outputs.config).package.download_url_testpypi }}
 #      upload-url: ${{ fromJSON(needs.init.outputs.config).package.upload_url_testpypi }}
-#  test-testpypi:
-#    name: 'Package Test: TestPyPI'
-#    needs: [init, publish-testpypi]
-#    if: fromJSON(needs.init.outputs.run).test-testpypi  # ${{ !failure() && fromJSON(needs.init.outputs.config).run.package_test_testpypi }}
-#    uses: ./.github/workflows/_pkg_test.yaml
-#    with:
-#      config: ${{ needs.init.outputs.test-testpypi }}
-##      config: ${{ needs.init.outputs.config }}
-##      metadata: ${{ needs.init.outputs.metadata }}
-##      package-source: TestPyPI
-#
+  test-testpypi:
+    name: 'Package Test: TestPyPI'
+    needs: [init, publish-testpypi]
+    if: fromJSON(needs.init.outputs.run).test-testpypi  # ${{ !failure() && fromJSON(needs.init.outputs.config).run.package_test_testpypi }}
+    uses: ./.github/workflows/_pkg_test.yaml
+    with:
+      config: ${{ needs.init.outputs.test-testpypi }}
+#      config: ${{ needs.init.outputs.config }}
+#      metadata: ${{ needs.init.outputs.metadata }}
+#      package-source: TestPyPI
 #  publish-pypi:
 #    name: 'Package Publish'
 #    needs: [init, test-testpypi]
