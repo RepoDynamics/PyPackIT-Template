@@ -205,7 +205,7 @@ jobs:
   finalize:
     name: 'Finalize'
     needs: [ init, build, website, test-pypi ]
-    if: ${{ !failure() && fromJSON(needs.init.outputs.run).finalize }}
+    if: fromJSON(needs.init.outputs.run).finalize
     permissions:
       contents: write
       discussions: write
