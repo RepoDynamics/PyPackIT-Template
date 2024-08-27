@@ -1,7 +1,7 @@
 # Project's main software development workflow.
 
-name: "Workflow"
-run-name: "${{ github.event_name }}: ${{ github.ref }}"
+name: 'Workflow'
+run-name: '${{ github.event_name }}: ${{ github.ref }}'
 
 on:
   issues:
@@ -22,10 +22,10 @@ on:
   pull_request_target:
     types:
       - opened
-#  push:
+  push:
   schedule:
     - cron: '43 23 * * *'  # Every day at 23:43 UTC.
-    - cron: '43 6 * * 6'  # Every Saturday at 6:43 UTC.
+    - cron: '43 6 * * 6'   # Every Saturday at 6:43 UTC.
   workflow_dispatch:
     inputs:
       config:
@@ -73,11 +73,14 @@ on:
 
 jobs:
   init:
-    name: 'Project'
+    name: Project
     # If the event is 'pull_request_target', only run if its from a fork.
+    # TODO: Remove the first line after PyPackIT finalization.
     if: >-
+      github.repository != 'RepoDynamics/PyPackIT-Template' && (  
       github.event_name != 'pull_request_target'
       || github.event.pull_request.head.repo.full_name != github.repository
+      )
     uses: ./.github/workflows/_manager.yaml
     permissions:
       contents: write
@@ -94,7 +97,7 @@ jobs:
     secrets:
       repo-admin-token: ${{ secrets.REPO_ADMIN_TOKEN }}
   website:
-    name: 'Website'
+    name: Website
     needs: init
     if: fromJSON(needs.init.outputs.run).website
     permissions:
@@ -121,7 +124,7 @@ jobs:
           artifact-name: ${{ matrix.config.artifact-name }}
           deploy: ${{ matrix.config.deploy }}
   lint:
-    name: 'Package Lint'
+    name: Package Lint
     needs: init
     if: fromJSON(needs.init.outputs.run).lint
     permissions:
@@ -137,14 +140,14 @@ jobs:
     with:
       config: ${{ toJSON(matrix.config) }}
   test:
-    name: 'Package Test'
+    name: Package Test
     needs: init
     if: fromJSON(needs.init.outputs.run).test
     uses: ./.github/workflows/_pkg_test.yaml
     with:
       config: ${{ needs.init.outputs.test }}
   build:
-    name: 'Package Build'
+    name: Package Build
     needs: init
     if: fromJSON(needs.init.outputs.run).build  # fromJSON(needs.init.outputs.config).run.package_build
     strategy:
