@@ -135,13 +135,13 @@ jobs:
     uses: ./.github/workflows/_pkg_lint.yaml
     with:
       config: ${{ toJSON(matrix.config) }}
-#  test:
-#    name: Package Test
-#    needs: init
-#    if: fromJSON(needs.init.outputs.run).test
-#    uses: ./.github/workflows/_pkg_test.yaml
-#    with:
-#      config: ${{ needs.init.outputs.test }}
+  test:
+    name: Package Test
+    needs: init
+    if: fromJSON(needs.init.outputs.run).test
+    uses: ./.github/workflows/_pkg_test.yaml
+    with:
+      config: ${{ needs.init.outputs.test }}
 #  build:
 #    name: Package Build
 #    needs: init
