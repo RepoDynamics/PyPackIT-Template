@@ -444,9 +444,38 @@ web:
           - tasklist
         myst_links_external_new_tab: true
         myst_heading_anchors: 6
+        myst_fence_as_directive: [ mermaid ]  # https://github.com/mgaitan/sphinxcontrib-mermaid?tab=readme-ov-file#markdown-support
         myst_sub_delimiters:
           - "|"
           - "|"
+    myst-nb:
+      dependency:
+        import_name: myst_nb
+        description: Adding Jupyter support to Sphinx.
+        url:
+          source: https://github.com/executablebooks/MyST-Parser
+          docs: https://myst-parser.readthedocs.io/
+          pip: https://pypi.org/project/myst-nb/
+          conda: https://anaconda.org/conda-forge/myst-nb
+        pip:
+          spec: myst-nb == 1.1.1
+        conda:
+          spec: myst-nb = 1.1.1
+          channel: conda-forge
+    thebe:
+      dependency:
+        import_name: sphinx_thebe
+        description: Make code cells interactive in Sphinx.
+        url:
+          source: https://github.com/executablebooks/sphinx-thebe
+          docs: https://sphinx-thebe.readthedocs.io
+          pip: https://pypi.org/project/sphinx-thebe/
+          conda: https://anaconda.org/conda-forge/sphinx-thebe
+        pip:
+          spec: sphinx-thebe == 0.3.1
+        conda:
+          spec: sphinx-thebe = 0.3.1
+          channel: conda-forge
     design:
       dependency:
         import_name: sphinx_design
@@ -455,12 +484,29 @@ web:
           docs: https://sphinx-design.readthedocs.io/
           source: https://github.com/executablebooks/sphinx-design
         pip:
-          spec: sphinx-design == 0.6.0
+          spec: sphinx-design == 0.6.1
         conda:
-          spec: sphinx-design = 0.6.0
+          spec: sphinx-design = 0.6.1
           channel: conda-forge
       config:
         sd_fontawesome_latex: true
+    ext_toc:
+      dependency:
+        import_name: sphinx_external_toc
+        description: Adding external table of contents to Sphinx.
+        url:
+          source: https://github.com/executablebooks/sphinx-external-toc
+          docs: https://sphinx-external-toc.readthedocs.io
+          pip: https://pypi.org/project/sphinx_external_toc/
+          conda: https://anaconda.org/conda-forge/sphinx-external-toc
+        pip:
+          spec: sphinx_external_toc == 1.0.1
+        conda:
+          spec: sphinx-external-toc = 1.0.1
+          channel: conda-forge
+      config:
+        external_toc_path: _toc.yaml
+        external_toc_exclude_missing: true
     autodoc2:
       dependency:
         import_name: autodoc2
@@ -468,11 +514,9 @@ web:
         url:
           docs: https://sphinx-autodoc2.readthedocs.io/
           source: https://github.com/sphinx-extensions2/sphinx-autodoc2
+          pip: https://pypi.org/project/sphinx-autodoc2/
         pip:
           spec: sphinx-autodoc2 == 0.5.0
-        conda:
-          spec: sphinx-autodoc2 = 0.5.0
-          channel: conda-forge
       config:
         autodoc2_packages: [ '${{ web.path.to_root }}/${{ pkg.path.import }}' ]
         autodoc2_output_dir: api
@@ -487,11 +531,12 @@ web:
           docs_config:
             url: https://ablog.readthedocs.io/en/stable/manual/ablog-configuration-options.html
         pip:
-          spec: ablog == 0.11.10
+          spec: ablog == 0.11.11
         conda:
-          spec: ablog = 0.11.10
+          spec: ablog = 0.11.11
           channel: conda-forge
       config:
+        # blog_authors (if not explicitly set here) is dynamically generated in conf.py from `team` data.
         html_sidebars:
           "${{ web.extension.ablog.config.blog_path }}/**":
             - ablog/postcard.html
@@ -546,8 +591,10 @@ web:
           channel: conda-forge
       config:
         ogp_site_url: ${{ web.url.base }}
+        ogp_use_first_image: true
+        ogp_enable_meta_description: true
         ogp_social_cards:
-          image: ${{ theme.path }}/img/ogp.png  #TODO
+          image: _static/simple_light.svg
           line_color: ${{ theme.color.primary.light }}
     bibtex:
       dependency:
@@ -556,10 +603,12 @@ web:
         url:
           docs: https://sphinxcontrib-bibtex.readthedocs.io/
           source: https://github.com/mcmtroffaes/sphinxcontrib-bibtex
+          pip: https://pypi.org/project/sphinxcontrib-bibtex/
+          conda: https://anaconda.org/conda-forge/sphinxcontrib-bibtex
         pip:
-          spec: sphinxcontrib-bibtex == 2.6.2
+          spec: sphinxcontrib-bibtex == 2.6.3
         conda:
-          spec: sphinxcontrib-bibtex = 2.6.2
+          spec: sphinxcontrib-bibtex = 2.6.3
           channel: conda-forge
       config:
         bibtex_bibfiles: [refs.bib]
@@ -577,6 +626,10 @@ web:
         conda:
           spec: sphinx-togglebutton = 0.3.2
           channel: conda-forge
+      config:
+        # https://sphinx-togglebutton.readthedocs.io/en/latest/use.html#change-the-button-hint-text
+        togglebutton_hint: show details
+        togglebutton_hint_hide: hide details
     mermaid:
       dependency:
         import_name: sphinxcontrib.mermaid
@@ -600,6 +653,24 @@ web:
         notes: |
           This doesn't work on `latex_logo`;
           see [nbsphinx](https://nbsphinx.readthedocs.io/en/latest/markdown-cells.html).
+    tippy:
+      dependency:
+        import_name: sphinx_tippy
+        description: Adding rich hover tooltips to content.
+        url:
+          docs: https://sphinx-tippy.readthedocs.io
+          source: https://github.com/sphinx-extensions2/sphinx-tippy
+          pip: https://pypi.org/project/sphinx_tippy
+        pip:
+          spec: sphinx-tippy == 0.4.3
+      config:
+        tippy_props:
+          placement: auto-start  # https://atomiks.github.io/tippyjs/v6/all-props/#placement
+          maxWidth: 500  # https://atomiks.github.io/tippyjs/v6/all-props/#maxwidth
+          theme: material  # https://atomiks.github.io/tippyjs/v6/all-props/#theme
+          interactive: true  # https://atomiks.github.io/tippyjs/v6/all-props/#interactive
+          delay: [200, 500]  # https://atomiks.github.io/tippyjs/v6/all-props/#delay
+          duration: [200, 100]  # https://atomiks.github.io/tippyjs/v6/all-props/#duration
   env:
     file:
       conda:
@@ -646,7 +717,7 @@ web:
         url:
           source: https://github.com/sphinx-doc/sphinx-autobuild
         pip:
-          spec: sphinx-autobuild >= 2024.4.16
+          spec: sphinx-autobuild >= 2024.09.17
       librsvg:
         import_name: librsvg
         description: |
