@@ -80,5 +80,10 @@ test:
     __init__.py:
       docstring: |
         ${{ name }} Test-Suite
+        
+        Copyright ${{copyright.notice}}
+        
+        ${{abstract}}
 
+        ${{license.notice}}
   build: *pkg-build
