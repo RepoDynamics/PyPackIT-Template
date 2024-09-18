@@ -7,27 +7,23 @@ theme:
       light: '#562B08'
       dark: '#E3651D'
   footer:
-    - class: line
+    - class: thematic_break
     - class: badges
-      default:
-        params_light:
-          style: for-the-badge
-      content:
+      style: for-the-badge
+      items:
         - service: dynamic
           args:
             url: ${{ control.url }}
             query: '$.copyright.notice'
             prefix: '©'
-          params_light:
-            label: ${{ name }}
-            color: ${{ theme.color.primary.light }}
-            logo: ${{ theme.path }}/${{ theme.logo.icon }}
-            logo_type: file
-          params_dark:
-            color: ${{ theme.color.primary.dark }}
-            logo: ${{ theme.path }}/${{ theme.logo.icon }}
-            logo_type: file
-          href: ${{ web.url.home }}
+          label: ${{ name }}
+          color: ${{ theme.color.primary.light }}
+          logo: ${{ theme.path }}/${{ theme.logo.icon }}
+          logo_type: file
+          color_dark: ${{ theme.color.primary.dark }}
+          logo_dark: ${{ theme.path }}/${{ theme.logo.icon }}
+          logo_type_dark: file
+          link: ${{ web.url.home }}
           title: '${{ name }}: ${{ copyright.notice }}'
           alt: ${{ name }}
           align: left
@@ -35,133 +31,111 @@ theme:
           args:
             url: ${{ control.url }}
             query: '$.license.id'
-          params_light:
-            label: License
-            color: ${{ theme.color.secondary.light }}
-          params_dark:
-            color: ${{ theme.color.secondary.dark }}
-          href: ${{ license.url }}
+          label: License
+          color: ${{ theme.color.secondary.light }}
+          color_dark: ${{ theme.color.secondary.dark }}
+          link: ${{ license.url }}
           title: ${{ name }} is licensed under the ${{ license.name }}
           alt: ${{ license.name }}
           align: left
         - service: repodynamics
           endpoint: pypackit
+          align: right
 readme:
   main:
     path: README.md
-    content: &readme_content
-      - class: image
-        src: ${{ repo.url.raw }}/${{ theme.path }}/${{ theme.logo.full.light }}
-        src_dark: ${{ repo.url.raw }}/${{ theme.path }}/${{ theme.logo.full.dark }}
-        width: 80%
-        href: ${{ web.url.home }}
-        title: Welcome to ${{ name }}! Click to visit our website and learn more.
-        alt: '${{ name }}: ${{ title }}'
-        align_div: center
-      - class: line
-        width: 80%
-        align_div: center
-      - class: static_badges
-        align_div: center
-        space: 2
-        default:
-          params_light:
-            style: for-the-badge
-            color: ${{ theme.color.primary.light }}
-          params_dark:
-            color: ${{ theme.color.primary.dark }}
+    content:
+      heading:
+        content:
+          - class: block_image
+            src: ${{ repo.url.raw }}/${{ theme.path }}/${{ theme.logo.full.light }}
+            src_dark: ${{ repo.url.raw }}/${{ theme.path }}/${{ theme.logo.full.dark }}
+            title: Welcome to ${{ name }}! Click to visit our website and learn more.
+            alt: '${{ name }}: ${{ title }}'
+            width: 80%
+            link: ${{ web.url.home }}
+        attrs:
+          align: center
+      body: &readme_content
+        - class: menu
+          items:
+            - text: Intro
+              link: ${{ web.page.intro.url }}
+              title: Introduction and Background
+            - text: Manual
+              link: ${{ web.page.manual.url }}
+              title: User Manual
+            - text: News
+              link: ${{ web.page.blog.url }}
+              title: Latest News and Releases
+            - text: Contribute
+              link: ${{ web.page.contribute.url }}
+              title: How to Contribute
+            - text: About
+              link: ${{ web.page.about.url }}
+              title: About the Project
+            - text: Help
+              link: ${{ web.page.help.url }}
+              title: Get Help and Support
+          line_top_width: 80%
+          line_bottom_width: 100%
+          style: for-the-badge
+          color: ${{ theme.color.primary.light }}
+          color_dark: ${{ theme.color.primary.dark }}
           height: 33px
-        content:
-          - message: Intro
-            href: ${{ web.page.intro.url }}
-            title: Introduction and Background
-          - message: Manual
-            href: ${{ web.page.manual.url }}
-            title: User Manual
-          - message: News
-            href: ${{ web.page.blog.url }}
-            title: Latest News and Releases
-          - message: Contribute
-            href: ${{ web.page.contribute.url }}
-            title: How to Contribute
-          - message: About
-            href: ${{ web.page.about.url }}
-            title: About the Project
-          - message: Help
-            href: ${{ web.page.help.url }}
-            title: Get Help and Support
-      - class: line
-        width: 100%
-      - class: paragraph
-        align: justify
-        text: ${{ abstract }}
-        styles:
-          - word: ${{ name }}
-            strong: true
-            emphasis: true
-            url: ${{ web.url.home }}
-            count: 1
-      - class: static_badges
-        content:
-          - message: 'Keywords:'
-            params_light:
-              style: plastic
-              color: 2c2e30
-            params_dark:
-              color: 2c2e30
+          attrs_container:
+            align: center
+        - class: paragraph
+          content: ${{ abstract }}
+          attrs:
+            align: justify
+        - - class: button
+            text: 'Keywords: '
+            style: plastic
+            color: '#2c2e30'
+            color_dark: '#2c2e30'
             height: 23px
-      - '&nbsp;&nbsp;'
-      - class: static_badges
-        space: 1
-        default:
-          height: 23px
-          params_light:
+          - '&nbsp;&nbsp;'
+          - class: buttons
+            items: ${{ keywords }}
+            height: 23px
             color: [ '${{ theme.color.primary.light }}', '${{ theme.color.secondary.light }}' ]
-          params_dark:
-            color: [ '${{ theme.color.primary.dark }}', '${{ theme.color.secondary.dark }}' ]
-        content: ${{ keywords }}
-      - class: line
-        width: 100%
-      - class: static_badges
-        align_div: center
-        space: 2
-        default:
-          params_light:
-            style: for-the-badge
-            color: ${{ theme.color.secondary.light }}
-          params_dark:
-            color: ${{ theme.color.secondary.dark }}
+            color_dark: [ '${{ theme.color.primary.dark }}', '${{ theme.color.secondary.dark }}' ]
+        - class: menu
+          items:
+            - text: Overview
+              link: ${{ web.page.overview.url }}
+              title: Project Overview
+            - text: Install
+              link: ${{ web.page.install.url }}
+              title: Installation Instructions
+            - text: Releases
+              link: ${{ web.page.blog_category_release.url }}
+              title: Release Notes and Changelogs
+            - text: Contact
+              link: ${{ web.page.contact.url }}
+              title: Contact Information
+          line_top_width: 100%
+          line_bottom_width: 80%
+          style: for-the-badge
+          color: ${{ theme.color.secondary.light }}
+          color_dark: ${{ theme.color.secondary.dark }}
           height: 33px
+          attrs_container:
+            align: center
+      section:
+      - heading: Highlights
         content:
-          - message: Overview
-            href: ${{ web.page.overview.url }}
-            title: Project Overview
-          - message: Install
-            href: ${{ web.page.install.url }}
-            title: Installation Instructions
-          - message: Releases
-            href: ${{ web.page.blog_category_release.url }}
-            title: Release Notes and Changelogs
-          - message: Contact
-            href: ${{ web.page.contact.url }}
-            title: Contact Information
-      - class: line
-        width: 100%
-      - class: heading
-        level: 2
-        align_div: center
-        content: Highlights
-      - class: highlights
-        align: justify
-        badge_default:
-          params_light:
-            style: for-the-badge
-            color: [ '${{ theme.color.primary.light }}', '${{ theme.color.secondary.light }}' ]
-          params_dark:
-            color: [ '${{ theme.color.primary.dark }}', '${{ theme.color.secondary.dark }}' ]
-          height: 30px
-          align: left
-        content: ${{ highlights }}
+          - class: highlights
+            items: ${{ highlights }}
+            button:
+              style: for-the-badge
+              color: [ '${{ theme.color.primary.light }}', '${{ theme.color.secondary.light }}' ]
+              color_dark: [ '${{ theme.color.primary.dark }}', '${{ theme.color.secondary.dark }}' ]
+              height: 30px
+              align: left
+            attrs_p:
+              align: justify
 #  dir:
 #    .github:
 #      content: |
@@ -245,37 +219,36 @@ health:
   code_of_conduct:
     path: CODE_OF_CONDUCT.md
     content:
-      - class: covenant
-        contact_name: ${{ maintainer.code_of_conduct.name.full }}
-        contact_url: ${{ maintainer.code_of_conduct.email.url }}
+      class: covenant_code_of_conduct
+      contact_name: ${{ maintainer.code_of_conduct.name.full }}
+      contact_url: ${{ maintainer.code_of_conduct.email.url }}
   contributing:
     path: CONTRIBUTING.md
     content:
-      - class: heading
-        level: 1
-        content: ${{ name }} Contributing Guidelines
-      - class: paragraph
-        align: justify
-        text: |
-          Welcome to the <em>${{name}}</em> community!
-          We are excited to have you here,
-          and grateful that you are considering contributing.
-          ${{name}} is a free and open-source project that evolves with the needs of its users,
-          and can only grow through the help of great members like you.
-      - class: heading
-        level: 2
-        content: How To Contribute
-      - class: paragraph
-        align: justify
-        text: |
-          To keep all our project documentation organized and easy to find, the complete
-          <a href="${{ web.page.contribute.url }}">contribution guide</a> is hosted on our website.
+      heading: ${{ name }} Contributing Guidelines
+      body:
+        - class: paragraph
+          attrs:
+            align: justify
+          content: |
+            Welcome to the <em>${{name}}</em> community!
+            We are excited to have you here,
+            and grateful that you are considering contributing.
+            ${{name}} is a free and open-source project that evolves with the needs of its users,
+            and can only grow through the help of great members like you.
+      section:
+        - heading: How To Contribute
+          body:
+            - class: paragraph
+              attrs:
+                align: justify
+              content: |
+                To keep all our project documentation organized and easy to find, the complete
+                <a href="${{ web.page.contribute.url }}">contribution guide</a> is hosted on our website.
   security:
     path: SECURITY.md
     content:
-      - class: heading
-        level: 1
-        content: Security Policy
+      heading: Security Policy
 web:
   sphinx:
     config:

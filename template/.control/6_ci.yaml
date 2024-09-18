@@ -107,6 +107,7 @@ tool:
                 - id: pretty-format-json
                   # https://github.com/pre-commit/pre-commit-hooks?tab=readme-ov-file#pretty-format-json
                   stages: [ pre-commit, manual ]
+                  args: [ --autofix, --indent, 3 ]
                   verbose: true
                 - id: trailing-whitespace
                   # https://github.com/pre-commit/pre-commit-hooks#trailing-whitespace
@@ -114,12 +115,11 @@ tool:
                   args: [ --markdown-linebreak-ext=md ]
                   verbose: true
             - repo: https://github.com/astral-sh/ruff-pre-commit
-              rev: v0.6.2
+              rev: v0.6.5
               hooks:
                 - id: ruff
                   stages: [ pre-commit, manual ]
                   args:
-                    - --statistics
                     - --verbose
                     - --config
                     - '${{ tool.ruff.config.file.path }}'
@@ -349,7 +349,7 @@ tool:
           fix: true
           line-length: 100
           output-format: grouped
-          required-version: == 0.6.2
+          required-version: == 0.6.5
           show-fixes: true
           src:
             - '${{ pkg.path.root }}/${{ pkg.path.source }}'
@@ -379,6 +379,8 @@ tool:
             per-file-ignores:
               '${{ test.path.root }}/${{ test.path.source }}/**':
                 - S101
+              '${{ web.path.root }}/${{ web.path.source }}/conf.py':
+                - TRY003  # https://docs.astral.sh/ruff/rules/raise-vanilla-args/#raise-vanilla-args-try003
             select:
               # https://docs.astral.sh/ruff/rules
               - F      # pyflakes
@@ -453,3 +455,5 @@ tool:
               max-args: 10
               max-public-methods: 50
               max-returns: 10
+            mccabe:
+              max-complexity: 15

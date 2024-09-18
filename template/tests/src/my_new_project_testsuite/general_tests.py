@@ -1,5 +1,4 @@
-"""General tests"""  # noqa: D400
-
+"""General tests."""
 
 import my_new_project as pkg
 
