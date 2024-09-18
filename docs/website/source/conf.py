@@ -217,8 +217,16 @@ def _add_extensions() -> None:
     return
 
 
-def _add_extension_ablog() -> None:
-    """Add ablog extension configurations."""
+def _add_ablog_blog_authors() -> None:
+    """Add ablog `blog_authors` extension configuration.
+
+    This function looks for the `blog_authors` key in the Sphinx configuration;
+    if not found, it adds the `blog_authors` key with the authors from the control center metadata.
+
+    References
+    ----------
+    - [ABlog Configuration Options](https://ablog.readthedocs.io/en/stable/manual/ablog-configuration-options.html#confval-blog_authors)
+    """
     if "blog_authors" in _globals:
         return
     blog_authors = {}
@@ -254,7 +262,7 @@ _add_version()
 _add_css_and_js_files()
 _add_theme()
 _add_extensions()
-_add_extension_ablog()
+_add_ablog_blog_authors()
 
 html_context = _globals.get("html_context", {}) | {
     "pp_meta": _meta,
