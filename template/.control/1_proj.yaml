@@ -40,12 +40,6 @@ license:
   id: AGPL-3.0-or-later
 copyright:
   notice: ${{ copyright.period }} ${{ team.owner.name.full }}
-team:
-  owner:
-    github:
-      id: quantized
-    email:
-      id: arg@gwrg.com
 maintainer:
   code_owners:
     owners:
