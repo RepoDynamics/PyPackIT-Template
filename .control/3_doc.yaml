@@ -432,24 +432,28 @@ web:
       html_sidebars:
         "**": [ sidebar-nav-bs ]
   extension:
-    myst:
+    myst-nb:
       dependency:
-        import_name: myst_parser
-        description: Adding MyST Markdown functionalities to Sphinx.
+        import_name: myst_nb
+        description: Adding MyST Markdown and Jupyter support to Sphinx.
+        note: |
+          MyST-NB is built on top of [MyST-Parser](https://myst-parser.readthedocs.io/)
+          and exposes all of its functionalities. It also includes support for Jupyter Notebooks.
+          When using MyST-NB, MyST-Parser must not be included separately.
         url:
           source: https://github.com/executablebooks/MyST-Parser
           docs: https://myst-parser.readthedocs.io/
-          docs_config:
-            url: https://myst-parser.readthedocs.io/en/latest/configuration.html
-          docs_extensions:
-            url: https://myst-parser.readthedocs.io/en/latest/syntax/optional.html
+          pip: https://pypi.org/project/myst-nb/
+          conda: https://anaconda.org/conda-forge/myst-nb
         pip:
-          spec: myst-parser[linkify] == 3.0.1
+          spec: myst-nb == 1.1.1
         conda:
-          spec: myst-parser = 3.0.1
+          spec: myst-nb = 1.1.1
           channel: conda-forge
       config:
-        myst_enable_extensions:
+        # ---- MyST Parser Configurations ----
+        # Ref: https://myst-parser.readthedocs.io/en/latest/configuration.html
+        myst_enable_extensions: # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html
           - amsmath
           - attrs_inline
           - attrs_block
@@ -470,20 +474,6 @@ web:
         myst_sub_delimiters:
           - "|"
           - "|"
-    myst-nb:
-      dependency:
-        import_name: myst_nb
-        description: Adding Jupyter support to Sphinx.
-        url:
-          source: https://github.com/executablebooks/MyST-Parser
-          docs: https://myst-parser.readthedocs.io/
-          pip: https://pypi.org/project/myst-nb/
-          conda: https://anaconda.org/conda-forge/myst-nb
-        pip:
-          spec: myst-nb == 1.1.1
-        conda:
-          spec: myst-nb = 1.1.1
-          channel: conda-forge
     thebe:
       dependency:
         import_name: sphinx_thebe
@@ -703,6 +693,22 @@ web:
       pip:
         path: ${{ web.path.root }}/requirements.txt
     dependency:
+      myst:
+        import_name: myst_parser
+        description: Adding MyST Markdown functionalities to Sphinx.
+        notes: |
+          This is added as a dependency and not an extension
+          because the MyST-NB extension (a superset of MyST-Parser) is used as an extension,
+          which already includes MyST-Parser.
+          However, here we specifically include MyST-Parser to ensure the correct version is installed.
+        url:
+          source: https://github.com/executablebooks/MyST-Parser
+          docs: https://myst-parser.readthedocs.io/
+        pip:
+          spec: myst-parser[linkify] == 3.0.1
+        conda:
+          spec: myst-parser = 3.0.1
+          channel: conda-forge
       linkify:
         import_name: linkify_it
         description: |
