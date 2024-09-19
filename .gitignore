@@ -25,6 +25,7 @@ pip-log.txt
 pip-delete-this-directory.txt
 htmlcov/
 .tox/
+.build/
 .nox/
 .coverage
 .coverage.*
