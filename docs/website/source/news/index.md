@@ -3,13 +3,8 @@ ccid: blog
 ---
 
 # News
-:::{toctree}
-:hidden:
-:glob:
 
-post/**
-:::
-
+oerhgoiehgoiehgoiehger
 
 :::{postlist}
 :format: "{title} - {date}, {author}"

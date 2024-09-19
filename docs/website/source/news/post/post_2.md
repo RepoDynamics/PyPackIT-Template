@@ -1,6 +1,6 @@
 ---
 date: 17.05.2023
-author: Armin Ariamajd
+author: owner
 category: Template
 tags: sample, template
 ---

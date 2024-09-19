@@ -41,5 +41,5 @@ section for an overview of Python packages and how to install them.
 :::{admonition} For developers
 :class: seealso
 To install the latest development version, or for editable installs,
-see the [Developer Guide](../contribute/index.md).
+see the [Developer Guide](../../contribute/index.md).
 :::
