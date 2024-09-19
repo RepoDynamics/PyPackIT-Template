@@ -5,17 +5,28 @@ options:
   numbered: true
 entries:
   - file: intro/index
+    title: Intro
     entries:
       - file: intro/overview/index
       - file: intro/background/index
   - file: manual/index
+    title: Manual
     entries:
       - file: manual/quickstart/index
       - file: manual/install/index
   - file: api/index
+    title: API
   - file: news/index
+    title: News
     entries:
       - glob: news/post/**
   - file: contribute/index
+    title: Contribute
   - file: about/index
+    title: About
+    entries:
+      - file: about/contact/index
   - file: help/index
+    title: Help
+    entries:
+      - file: help/sitemap/index
