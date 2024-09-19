@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Set a custom icon for pypi as it's not available in the fa built-in brands
+ * Set a custom icon for conda as it's not available in the fa built-in brands
  */
 FontAwesome.library.add(
   (faListOldStyle = {
