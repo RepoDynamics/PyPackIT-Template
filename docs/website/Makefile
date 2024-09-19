@@ -6,7 +6,7 @@
 SPHINXOPTS    ?= -v -W -T --keep-going
 SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = source
-BUILDDIR      = _build
+BUILDDIR      = .build
 FORCE_COLOR   = true
 
 # Put it first so that "make" without argument is like "make help".
