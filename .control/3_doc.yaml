@@ -338,6 +338,9 @@ web:
         dependency:
           import_name: sphinx.ext.intersphinx
           description: Adding links to external documentation.
+          notes: |
+            This is also required for the
+            [ABlog extension](https://ablog.readthedocs.io/en/stable/index.html#getting-started).
           url:
             docs: https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html
         config:
@@ -562,8 +565,8 @@ web:
         blog_default_author: owner
         post_auto_image: 1
         post_always_section: true
+        post_show_prev_next: false
         blog_post_pattern:
-          - ${{ web.extension.ablog.config.blog_path }}/post/*.rst
           - ${{ web.extension.ablog.config.blog_path }}/post/*.md
         blog_feed_archives: true
         fontawesome_included: true
