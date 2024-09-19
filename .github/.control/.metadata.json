@@ -4517,6 +4517,7 @@
          },
          "autodoc2": {
             "config": {
+               "autodoc2_index_template": null,
                "autodoc2_output_dir": "api",
                "autodoc2_packages": [
                   "../../../pkg/src/my_new_project"
