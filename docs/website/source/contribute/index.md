@@ -2,4 +2,4 @@
 ccid: contribute
 ---
 
-# Contribute
+# Contribution Guide
