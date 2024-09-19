@@ -606,6 +606,8 @@ web:
         url:
           docs: https://sphinxext-opengraph.readthedocs.io/
           source: https://github.com/wpilibsuite/sphinxext-opengraph/
+          pip: https://pypi.org/project/sphinxext-opengraph
+          conda: https://anaconda.org/conda-forge/sphinxext-opengraph
         pip:
           spec: sphinxext-opengraph == 0.9.1
         conda:
