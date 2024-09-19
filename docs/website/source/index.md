@@ -5,20 +5,6 @@ html_theme.sidebar_secondary.remove:
 
 # {{pp_meta.name}}
 
-:::{toctree}
-:includehidden:
-:hidden:
-:numbered:
-intro/index
-manual/index
-api/index
-news/index
-contribute/index
-about/index
-help/index
-:::
-
-
 {% for theme in ["light", "dark"] %}
 :::{image} {{pp_meta.web.path.to_root}}/{{pp_meta.theme.path}}/{{pp_meta.theme.logo.full[theme]}}
 :alt: {{pp_meta.name}}
@@ -30,8 +16,7 @@ help/index
 ---
 
 {.element-in-page-without-sidebar}
-{{ pp_meta.abstract.replace(pp_meta.name,
-"[{}]{}".format(pp_meta.name, "{.project-name}"), 1) }}
+{{ pp_meta.abstract.replace(pp_meta.name, "[{}]{}".format(pp_meta.name, "{.project-name}"), 1) }}
 
 
 <div class="element-in-page-without-sidebar">
@@ -64,7 +49,7 @@ help/index
 
 <div class="element-in-page-without-sidebar">
 
-:::{button-ref} intro/overview/index
+:::{button-ref} intro/index
 :ref-type: myst
 :color: primary
 :expand:
@@ -73,6 +58,7 @@ help/index
 :::
 
 </div>
+
 
 
 ::::{card-carousel} 1
@@ -177,6 +163,5 @@ and the dedication driving {{ pp_meta.name }}'s success.
 The Help section is your go-to resource for assistance with any challenges you encounter.
 Explore FAQs, troubleshoot common issues, and connect with our support team for personalized solutions.
 :::
-
 
 ::::
