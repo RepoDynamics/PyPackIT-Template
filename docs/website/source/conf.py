@@ -6,8 +6,8 @@ from typing import TYPE_CHECKING as _TYPE_CHECKING
 import json as _json
 from pathlib import Path as _Path
 
-import gittidy as _git
-from versionman import pep440_semver as _semver
+# import gittidy as _git
+# from versionman import pep440_semver as _semver
 
 if _TYPE_CHECKING:
     from typing import Any
@@ -48,14 +48,14 @@ def _source_jinja_template(app: Sphinx, docname: str, content: list[str]) -> Non
 
 def _add_version() -> None:
     """Add the version to the Sphinx configuration."""
-    if all(key in _globals for key in ("version", "release")):
-        return
-    ver_tag_prefix = _meta["tag"]["version"]["prefix"]
-    tags = _git.Git(path=_path_root).get_tags()
-    ver = _semver.latest_version_from_tags(tags=tags, version_tag_prefix=ver_tag_prefix)
-    if ver:
-        _globals["version"] = _globals.get("version") or f"{ver.major}.{ver.minor}"
-        _globals["release"] = _globals.get("release") or str(ver)
+    # if all(key in _globals for key in ("version", "release")):
+    #     return
+    # ver_tag_prefix = _meta["tag"]["version"]["prefix"]
+    # tags = _git.Git(path=_path_root).get_tags()
+    # ver = _semver.latest_version_from_tags(tags=tags, version_tag_prefix=ver_tag_prefix)
+    # if ver:
+    #     _globals["version"] = _globals.get("version") or f"{ver.major}.{ver.minor}"
+    #     _globals["release"] = _globals.get("release") or str(ver)
     return
 
 
@@ -232,12 +232,15 @@ def _add_ablog_blog_authors() -> None:
     blog_authors = {}
     _globals["blog_authors"] = blog_authors
     for person_id, person in _meta["team"].items():
-        for contact_type in ("website", "github", "twitter", "linkedin", "researchgate", "orcid", "email"):
-            if contact_type in person:
-                url = person[contact_type]["url"]
-                break
+        if "website" in person:
+            url = person["website"]
         else:
-            url = _meta["web"]["url"]["home"]
+            for contact_type in ("github", "twitter", "linkedin", "researchgate", "orcid", "email"):
+                if contact_type in person:
+                    url = person[contact_type]["url"]
+                    break
+            else:
+                url = _meta["web"]["url"]["home"]
         blog_authors[person_id] = (person["name"]["full"], url)
     return
 
