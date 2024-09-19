@@ -527,7 +527,7 @@ web:
           channel: conda-forge
       config:
         external_toc_path: _toc.yaml
-        external_toc_exclude_missing: true
+        external_toc_exclude_missing: false
     autodoc2:
       dependency:
         import_name: autodoc2
