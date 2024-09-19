@@ -1,3 +1,4 @@
+docs/website/.build/
 __pycache__/
 *.py[cod]
 *$py.class
@@ -25,7 +26,6 @@ pip-log.txt
 pip-delete-this-directory.txt
 htmlcov/
 .tox/
-.build/
 .nox/
 .coverage
 .coverage.*
@@ -78,6 +78,7 @@ cython_debug/
 .vscode/
 .idea/
 .DS_Store
+.github/.control/local_config.yaml
 .local/**
 !.local/**/
 !.local/**/README.md
