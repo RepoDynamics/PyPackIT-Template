@@ -2,4 +2,4 @@
 ccid: intro
 ---
 
-# Intro
+# Introduction
