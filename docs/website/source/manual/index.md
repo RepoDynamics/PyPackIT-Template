@@ -2,4 +2,4 @@
 ccid: manual
 ---
 
-# Manual
+# User Manual
