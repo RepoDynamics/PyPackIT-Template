@@ -1,0 +1,21 @@
+root: index
+defaults:
+  hidden: true
+options:
+  numbered: true
+entries:
+  - file: intro/index
+    entries:
+      - file: intro/overview/index
+      - file: intro/background/index
+  - file: manual/index
+    entries:
+      - file: manual/quickstart/index
+      - file: manual/install/index
+  - file: api/index
+  - file: news/index
+    entries:
+      - glob: news/post/**
+  - file: contribute/index
+  - file: about/index
+  - file: help/index
