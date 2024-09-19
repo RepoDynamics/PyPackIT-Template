@@ -1,5 +1,1 @@
 # Background
-:::{toctree}
-:hidden:
-
-:::
