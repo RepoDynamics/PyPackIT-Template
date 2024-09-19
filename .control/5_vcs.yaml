@@ -128,6 +128,9 @@ repo:
     # ------------------------------------------ Jupyter notebook --------------------------------------
     - "*.ipynb": [ text, eol=lf ]
   gitignore:
+    # Project-specific files
+    - ${{ web.path.root }}/${{ web.path.source }}/.build/
+
     # Byte-compiled / optimized / DLL files
     - __pycache__/
     - "*.py[cod]"
