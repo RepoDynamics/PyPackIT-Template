@@ -4601,7 +4601,7 @@
          },
          "ext_toc": {
             "config": {
-               "external_toc_exclude_missing": true,
+               "external_toc_exclude_missing": false,
                "external_toc_path": "_toc.yaml"
             },
             "dependency": {
