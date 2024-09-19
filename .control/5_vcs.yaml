@@ -129,7 +129,7 @@ repo:
     - "*.ipynb": [ text, eol=lf ]
   gitignore:
     # Project-specific files
-    - ${{ web.path.root }}/${{ web.path.source }}/.build/
+    - ${{ web.path.root }}/.build/
 
     # Byte-compiled / optimized / DLL files
     - __pycache__/
