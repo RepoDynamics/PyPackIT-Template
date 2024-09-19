@@ -15,7 +15,7 @@ if _TYPE_CHECKING:
 
 
 _METADATA_FILEPATH = ".github/.control/.metadata.json"
-_globals = globals()
+_globals = {}
 
 
 def setup(app: Sphinx):
@@ -258,6 +258,15 @@ def _read_metadata() -> dict[str, Any]:
         raise RuntimeError(error_msg) from e
 
 
+def _add_html_context():
+    """Add the HTML context to the Sphinx configuration."""
+    _globals["html_context"] = _globals.get("html_context", {}) | {
+        "pp_meta": _meta,
+        "pp_title_sep": _globals.get("html_secnumber_suffix"),
+    }
+    return
+
+
 _path_root, _path_to_root = _get_path_repo_root()
 _meta = _read_metadata()
 _add_sphinx()
@@ -267,7 +276,11 @@ _add_theme()
 _add_extensions()
 _add_ablog_blog_authors()
 
-html_context = _globals.get("html_context", {}) | {
-    "pp_meta": _meta,
-    "pp_title_sep": _globals.get("html_secnumber_suffix"),
-}
+
+import rich as _rich
+_rich.print(dict(sorted(_globals.items())))
+
+
+_add_html_context()
+
+globals().update(_globals)
