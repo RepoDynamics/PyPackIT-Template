@@ -267,6 +267,14 @@ web:
       html_short_title: ${{ name }}
       html_baseurl: ${{ web.url.base }}
       html_favicon: ${{ web.path.to_root }}/${{ theme.path }}/${{ theme.logo.icon }}
+      html_sidebars:
+        "${{ web.page.blog.path }}/**":
+          - ablog/postcard.html
+          - ablog/recentposts.html
+          - ablog/tagcloud.html
+          - ablog/categories.html
+          - ablog/archives.html
+          - ablog/authors.html
       html_static_path:
         - _static
         - '${{ web.path.to_root }}/${{ theme.path }}'
@@ -432,8 +440,6 @@ web:
         github_version: ${{ repo.default_branch }}
         doc_path: ${{ web.path.root }}/${{ web.path.source }}
         default_mode: auto  # Default theme mode: {'light', 'dark', 'auto'}
-      html_sidebars:
-        "**": [ sidebar-nav-bs ]
   extension:
     myst-nb:
       dependency:
@@ -552,24 +558,17 @@ web:
           channel: conda-forge
       config:
         # blog_authors (if not explicitly set here) is dynamically generated in conf.py from `team` data.
-        html_sidebars:
-          "${{ web.extension.ablog.config.blog_path }}/**":
-            - ablog/postcard.html
-            - ablog/recentposts.html
-            - ablog/tagcloud.html
-            - ablog/categories.html
-            - ablog/archives.html
-        blog_path: ${{ web.page.blog.path }}
-        blog_title: ${{ name }} News
         blog_baseurl: ${{ web.url.base }}
         blog_default_author: owner
-        post_auto_image: 1
-        post_always_section: true
-        post_show_prev_next: false
-        blog_post_pattern:
-          - ${{ web.extension.ablog.config.blog_path }}/post/*.md
         blog_feed_archives: true
+        blog_path: ${{ web.page.blog.path }}/list
+        blog_post_pattern:
+          - ${{ web.page.blog.path }}/post/*.md
+        post_show_prev_next: false
+        blog_title: ${{ name }} News
         fontawesome_included: true
+        post_always_section: true
+        post_auto_image: 1
     copy_button:
       dependency:
         import_name: sphinx_copybutton
