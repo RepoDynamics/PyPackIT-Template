@@ -539,6 +539,7 @@ web:
         pip:
           spec: sphinx-autodoc2 == 0.5.0
       config:
+        autodoc2_index_template: null
         autodoc2_packages: [ '${{ web.path.to_root }}/${{ pkg.path.import }}' ]
         autodoc2_output_dir: api
         autodoc2_render_plugin: myst
