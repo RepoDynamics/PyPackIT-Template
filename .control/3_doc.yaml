@@ -280,6 +280,7 @@ web:
       html_context:
         pp_title_sep: ${{ web.sphinx.config.html_secnumber_suffix }}
       html_last_updated_fmt: '%b %d, %Y'
+      language: en
       latex_engine: lualatex
       latex_elements:
         papersize: a4paper
@@ -345,43 +346,51 @@ web:
             numpy: [ 'https://numpy.org/doc/stable/', null ]
             matplotlib: [ 'https://matplotlib.org/stable/', null ]
   theme:
+    dependency:
+      import_name: pydata_sphinx_theme
+      pip:
+        spec: pydata-sphinx-theme == 0.15.4
+      conda:
+        spec: pydata-sphinx-theme == 0.15.4
+        channel: conda-forge
+      url:
+        docs: https://pydata-sphinx-theme.readthedocs.io/
+        source: https://github.com/pydata/pydata-sphinx-theme
     config:
       # https://pydata-sphinx-theme.readthedocs.io/en/stable/user_guide/layout.html#references
       html_theme_options:
+        # ---- Section Layout ----
+        # -- Header --
         navbar_start: [ navbar-logo ]  # header left
         navbar_center: [ navbar-nav ]  # header center
-        navbar_end: [ navbar-icon-links, theme-switcher ]  # header right
         navbar_persistent: [ search-button ]  # header right persistent
+        navbar_end: [ navbar-icon-links, theme-switcher ]  # header right
         navbar_align: left  # alignment of `navbar_center`: {"left", "right", "content"}
+        # -- Article Header --
         article_header_start: [ breadcrumbs ]  # article header left
         article_header_end: [ ]  # article header right
+        # -- Article Footer --
+        article_footer_items: [ ]  # article footer
+        # -- Primary Sidebar (left) --
         primary_sidebar_end: [ ]  # left sidebar bottom
+        # -- Secondary Sidebar (right) --
         secondary_sidebar_items:
-          - "page-toc"
-          - "last-updated"
-          - "edit-this-page"
-          - "indices"
-        article_footer_items: [ ]
-        show_prev_next: True
+          - page-toc
+          - last-updated
+          - edit-this-page
+          - indices
+        # -- Content Footer --
         content_footer_items: [ ]
-        footer_start: [ "version", "copyright", "pypackit_ver" ]  # footer left
-        footer_end: [ "quicklinks" ]  # footer right
+        # -- Footer --
+        footer_start: [ version, copyright, pypackit_ver ]  # footer left
+        footer_center: [ ]  # footer center
+        footer_end: [ quicklinks ]  # footer right
+        # ---- General ----
+        show_prev_next: True
         show_nav_level: 2
         navigation_depth: 5
         show_toc_level: 3
         header_links_before_dropdown: 7
-        icon_links_label: "External links"
-        use_edit_page_button: true
-        announcement: ${{ announcement.url }}
-        search_bar_text: Search ${{ name }}
-        logo:
-          image_light: _static/simple_light.svg
-          image_dark: _static/simple_dark.svg
-          alt_text: ${{ name }}
-        pygment_light_style: default  # Code highlighting color themes. See: https://pygments.org/styles/
-        pygment_dark_style: monokai   # https://pydata-sphinx-theme.readthedocs.io/en/stable/user_guide/styling.html#configure-pygments-theme
-        sidebarwidth: 270
-        sidebar_includehidden: True
         icon_links:
           - name: PyPI Distribution
             icon: fa-brands fa-python
@@ -401,11 +410,24 @@ web:
           - name: License
             icon: fa-solid fa-copyright
             url: ${{ license.url }}
+        icon_links_label: External links
+        use_edit_page_button: true
+        announcement: ${{ announcement.url }}
+        search_bar_text: Search ${{ name }}
+        back_to_top_button: true
+        logo:
+          image_light: _static/simple_light.svg
+          image_dark: _static/simple_dark.svg
+          alt_text: ${{ name }}
+        pygments_light_style: default  # Code highlighting color themes. See: https://pygments.org/styles/
+        pygments_dark_style: monokai   # https://pydata-sphinx-theme.readthedocs.io/en/stable/user_guide/styling.html#configure-pygments-theme
+        sidebarwidth: 270
+        sidebar_includehidden: True
       html_context:
         github_user: ${{ team.owner.github.id }}
         github_repo: ${{ repo.name }}
         github_version: ${{ repo.default_branch }}
-        doc_path: ${{ web.path.source }}
+        doc_path: ${{ web.path.root }}/${{ web.path.source }}
         default_mode: auto  # Default theme mode: {'light', 'dark', 'auto'}
       html_sidebars:
         "**": [ sidebar-nav-bs ]
