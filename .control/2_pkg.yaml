@@ -4,7 +4,7 @@ pkg:
   name: ${{ name }}
   import_name: ${{ pkg.name }}
   readme:
-    path: ${{ ..path.root }}/README.md
+    path: ${{ pkg.path.root }}/README.md
     content: ${{ readme.main.content }}
   urls:
     Homepage: ${{ web.url.home }}
@@ -128,4 +128,7 @@ test:
         ${{ name }} Test-Suite.
 
         ${{license.notice}}
+  manifest:
+    - graft ${{ test.path.source }}/${{ test.import_name }}/data
+    - global-exclude *.py[cod] __pycache__ *.so
   build: *pkg-build
