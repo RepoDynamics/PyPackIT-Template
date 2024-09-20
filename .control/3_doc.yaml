@@ -760,7 +760,7 @@ web:
       librsvg:
         import_name: librsvg
         description: |
-          Library for rendering SVG files and using them 
+          Library for rendering SVG files and using them
           in PDF (via LaTeX) builds done by latexmk.
         conda:
           spec: librsvg
