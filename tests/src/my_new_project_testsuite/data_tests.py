@@ -1,6 +1,7 @@
 """Unit tests for the data sub-package."""
 
 import pytest
+
 import my_new_project as pkg
 
 
