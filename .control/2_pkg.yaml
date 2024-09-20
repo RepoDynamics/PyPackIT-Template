@@ -35,15 +35,13 @@ pkg:
   file:
     __init__.py:
       docstring: |
-        ${{name}}: ${{title}}
-
-        Copyright ${{copyright.notice}}
+        ${{name}}: ${{title}}.
 
         ${{abstract}}
 
         ${{license.notice}}
   manifest:
-    - graft ${{ pkg.path.source }}/${{ pkg.import_name }}
+    - graft ${{ pkg.path.source }}/${{ pkg.import_name }}/data
     - global-exclude *.py[cod] __pycache__ *.so
   build: &pkg-build
     tool:
@@ -127,11 +125,7 @@ test:
   file:
     __init__.py:
       docstring: |
-        ${{ name }} Test-Suite
-
-        Copyright ${{copyright.notice}}
-
-        ${{abstract}}
+        ${{ name }} Test-Suite.
 
         ${{license.notice}}
   build: *pkg-build
