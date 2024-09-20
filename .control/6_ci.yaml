@@ -256,7 +256,7 @@ tool:
     config:
       file:
         type: toml
-        path: ${{ test.path.root }}/pyproject.toml
+        path: ${{ test.path.import }}/data/config/pytest.toml
         content:
           tool:
             pytest:
@@ -267,15 +267,17 @@ tool:
                   --color=yes
                   --full-trace
                   --cov
-                  --cov-config=pyproject.toml
+                  --cov-config='$|| path_config ||/coverage.toml'
                   --cov-report=term-missing:skip-covered
                   --cov-report=html
                   --cov-report=xml
                   --strict-config
-                  --strict-markers
-                  --junit-xml=${{ local.path }}/report/pytest/junit.xml
-                cache_dir: ${{ local.path }}/cache/pytest
+                  --junit-xml='$|| path_report ||/pytest/junit.xml'
+                  --import-mode=importlib
+                  --debug='$|| path_report ||/pytest/debug.log'
+                cache_dir: $|| path_cache ||/pytest
                 console_output_style: count
+                junit_logging: all
                 junit_suite_name: ${{ test.import_name }}
                 log_auto_indent: true
                 log_cli: true
@@ -283,7 +285,7 @@ tool:
                 log_cli_format: '%(levelname)s %(message)s'
                 log_cli_level: INFO
                 log_date_format: '%Y-%m-%d %H:%M:%S'
-                log_file: ${{ local.path }}/report/pytest/log.txt
+                log_file: $|| path_report ||/pytest/log.txt
                 log_file_date_format: '%Y-%m-%d %H:%M:%S'
                 log_file_format: '%(asctime)s %(levelname)s %(message)s'
                 log_file_level: DEBUG
@@ -295,7 +297,6 @@ tool:
                 python_functions: ["test_*", "tests_*", "*_test", "*_tests"]
                 required_plugins:
                   - pytest-cov>=5.0.0,<6
-                testpaths: [ '${{ test.path.source }}' ]
   coverage:
     # pytest-cov / Coverage.py
     # Ref: https://pytest-cov.readthedocs.io/en/latest/config.html
@@ -303,14 +304,15 @@ tool:
     config:
       file:
         type: toml
-        path: ${{ test.path.root }}/pyproject.toml
+        path: ${{ test.path.import }}/data/config/coverage.toml
         content:
           tool:
             coverage:
               run:
                 branch: true
-                data_file: "${{ local.path }}/cache/coverage/.coverage"
-                source_pkgs: ["${{ pkg.import_name }}"]
+                data_file: $|| path_cache ||/coverage/coverage
+                debug_file: $|| path_report ||/coverage/debug.log
+                source_pkgs: [ "${{ pkg.import_name }}" ]
               report:
                 # Regexes for lines to exclude from consideration
                 exclude_also:
@@ -325,11 +327,18 @@ tool:
                 - "if __name__ == .__main__.:"
                 # Don't complain about abstract methods, they aren't run:
                 - "@(abc\\.)?abstractmethod"
+                format: markdown
                 show_missing: true
               html:
-                directory: "${{ local.path }}/report/coverage"
+                directory: $|| path_report ||/coverage/html
+                show_contexts: true
+                title: "${{ pkg.name }} Test Coverage"
               xml:
-                output: "${{ local.path }}/report/coverage/coverage.xml"
+                output: $|| path_report ||/coverage/coverage.xml
+              json:
+                output: $|| path_report ||/coverage/coverage.json
+                pretty_print: true
+                show_contexts: true
   ruff:
     env:
       dependency:
