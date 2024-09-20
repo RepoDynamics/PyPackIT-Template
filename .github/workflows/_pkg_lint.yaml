@@ -129,7 +129,7 @@ jobs:
           TEMP_REPORT_DIR="${{ github.workspace }}/reports/bandit"
           mkdir -p $TEMP_REPORT_DIR
           echo "::endgroup::"
-          
+
           cd repo
           echo "::group::Run bandit"
           bandit \
@@ -221,7 +221,7 @@ jobs:
           TEMP_REPORT_DIR="${{ github.workspace }}/reports/mypy/${{ runner.os }}/py_${{ matrix.python-version }}"
           mkdir -p $TEMP_REPORT_DIR
           echo "::endgroup::"
-          
+
           cd repo
           echo "::group::Run mypy"
           mypy \
