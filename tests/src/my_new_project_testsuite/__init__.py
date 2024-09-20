@@ -12,7 +12,7 @@ def run(
     path_cache: str | Path | None = None,
     path_report: str | Path | None = None,
     template_start: str = "$|| ",
-    template_end: str = " ||$",
+    template_end: str = " ||",
 ) -> int:
     """Run the test-suite.
 
@@ -36,6 +36,8 @@ def run(
         for path in path_config.iterdir():
             if not path.is_file():
                 continue
+            (path_cache / path.stem).mkdir(exist_ok=True)
+            (path_report / path.stem).mkdir(exist_ok=True)
             config = path.read_text()
             for template, value in (
                 (f"{template_start}{template_name}{template_end}", template_value)
@@ -46,12 +48,13 @@ def run(
                 )
             ):
                 config = config.replace(template, str(value))
-            (path_config_temp / path.name).write_text(config)
+            file_temp_path = path_config_temp / path.name
+            file_temp_path.write_text(config)
             if path.stem == "pytest":
-                path_pytest_config = path
-        final_args = [f'--rootdir="{path_root}"']
+                path_pytest_config = file_temp_path
+        final_args = [f'--rootdir={path_root}']
         if path_pytest_config:
-            final_args.append(f'--config-file="{path_pytest_config}"')
+            final_args.append(f'--config-file={path_pytest_config}')
         if args:
             final_args.extend(args)
         if overrides:
