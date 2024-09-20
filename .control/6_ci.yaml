@@ -26,14 +26,22 @@ tool:
     env:
       dependency:
         pre_commit:
+          name: Pre-Commit
+          description: Running formatting and linting checks.
           import_name: pre_commit
-          url:
-            docs: https://pre-commit.com/
           pip:
             spec: pre-commit == 3.8.0
+          conda:
+            spec: pre-commit = 3.8.0
+            channel: conda-forge
+          url:
+            docs: https://pre-commit.com/
+            source: https://github.com/pre-commit/pre-commit
+            pip: https://pypi.org/project/pre-commit/
+            conda: https://anaconda.org/conda-forge/pre_commit
       file:
         conda: &conda_dev_env
-          name: ${{ repo.name }}-dev
+          name: ${{ slug.name }}-dev
           path: .github/dev_environment.yaml
     config:
       file:
@@ -107,7 +115,7 @@ tool:
                 - id: pretty-format-json
                   # https://github.com/pre-commit/pre-commit-hooks?tab=readme-ov-file#pretty-format-json
                   stages: [ pre-commit, manual ]
-                  args: [ --autofix, --indent, 3 ]
+                  args: [ --autofix, --indent, '3' ]
                   verbose: true
                 - id: trailing-whitespace
                   # https://github.com/pre-commit/pre-commit-hooks#trailing-whitespace
@@ -115,7 +123,7 @@ tool:
                   args: [ --markdown-linebreak-ext=md ]
                   verbose: true
             - repo: https://github.com/astral-sh/ruff-pre-commit
-              rev: v0.6.5
+              rev: v0.6.6
               hooks:
                 - id: ruff
                   stages: [ pre-commit, manual ]
@@ -195,9 +203,18 @@ tool:
     env:
       dependency:
         mypy:
+          name: Mypy
           import_name: mypy
           pip:
-            spec: mypy[reports] >= 1.8, < 2
+            spec: mypy[reports] == 1.11.2
+          conda:
+            spec: mypy = 1.11.2
+            channel: conda-forge
+          url:
+            docs: https://mypy.readthedocs.io/
+            source: https://github.com/python/mypy
+            pip: https://pypi.org/project/mypy/
+            conda: https://anaconda.org/conda-forge/mypy
       file:
         conda: *conda_dev_env
         pip:
@@ -235,21 +252,6 @@ tool:
               txt_report: "${{ local.path }}/report/mypy"
               # Miscellaneous
               verbosity: 2
-  bandit:
-    env:
-      dependency:
-        bandit:
-          import_name: bandit
-          pip:
-            spec: bandit[toml]
-        sarif:
-          import_name: bandit_sarif_formatter
-          pip:
-            spec: bandit-sarif-formatter
-      file:
-        conda: *conda_dev_env
-        pip:
-          path: .github/workflow_requirements/bandit.txt
   pytest:
     # Ref: https://docs.pytest.org/en/stable/reference/reference.html#ini-options-ref
     # Ref: https://docs.pytest.org/en/stable/reference/customize.html
@@ -343,14 +345,6 @@ tool:
                 output: $|| path_report ||/coverage/coverage.json
                 pretty_print: true
   ruff:
-    env:
-      dependency:
-        ruff:
-          import_name: ruff
-          pip:
-            spec: ruff == 0.6.2
-      file:
-        conda: *conda_dev_env
     config:
       file:
         type: toml
@@ -361,7 +355,7 @@ tool:
           fix: true
           line-length: 100
           output-format: grouped
-          required-version: == 0.6.5
+          required-version: == 0.6.6
           show-fixes: true
           src:
             - '${{ pkg.path.root }}/${{ pkg.path.source }}'
