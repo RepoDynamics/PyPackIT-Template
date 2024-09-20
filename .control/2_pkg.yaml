@@ -28,7 +28,7 @@ pkg:
           Handling package resources, such as accessing data files that are
           distributed with the package.
         pip:
-          spec: pkgdata >= 0.1, < 0.2
+          spec: pkgdata
         url:
           docs: https://pkgdata.repodynamics.com/
           source: https://github.com/repodynamics/pkgdata
