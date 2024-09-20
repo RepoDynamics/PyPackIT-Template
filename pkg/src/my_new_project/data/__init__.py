@@ -23,5 +23,9 @@ def get(relative_path: str) -> Path:
     path_data_dir = _pkgdata.get_package_path_from_caller(top_level=False)
     filepath = path_data_dir / relative_path
     if not filepath.is_file():
-        raise FileNotFoundError(f"Could not find package data file at {filepath}")
+        from my_new_project.exception.data import DataFileNotFoundError
+        raise DataFileNotFoundError(
+            path_relative=relative_path,
+            path_absolute=filepath,
+        )
     return filepath
