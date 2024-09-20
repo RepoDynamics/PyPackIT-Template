@@ -55,11 +55,11 @@ def run(
     path_root = pkgdata.get_package_path_from_caller(top_level=True).resolve()
     path_config = path_root / "data" / "config"
     path_pytest_config = None
-    with tempfile.TemporaryDirectory() as temp_path:
-        temp_path = Path(temp_path)
-        path_config_temp = temp_path / "config"
-        path_cache = Path(path_cache) if path_cache else temp_path / "cache"
-        path_report = Path(path_report) if path_report else temp_path / "report"
+    with tempfile.TemporaryDirectory() as temp_dir:
+        temp_dir_path = Path(temp_dir)
+        path_config_temp = temp_dir_path / "config"
+        path_cache = Path(path_cache) if path_cache else temp_dir_path / "cache"
+        path_report = Path(path_report) if path_report else temp_dir_path / "report"
         for path in (path_config_temp, path_cache, path_report):
             path.mkdir(parents=True, exist_ok=True)
         for path in path_config.iterdir():
