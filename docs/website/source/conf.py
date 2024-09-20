@@ -6,8 +6,9 @@ import json as _json
 from pathlib import Path as _Path
 from typing import TYPE_CHECKING as _TYPE_CHECKING
 
-# import gittidy as _git
-# from versionman import pep440_semver as _semver
+import gittidy as _git
+from loggerman import logger as _logger
+from versionman import pep440_semver as _semver
 try:
     from intersphinx_registry import get_intersphinx_mapping as _get_intersphinx_mapping
 except (ImportError, ModuleNotFoundError):
@@ -53,14 +54,14 @@ def _source_jinja_template(app: Sphinx, docname: str, content: list[str]) -> Non
 
 def _add_version() -> None:
     """Add the version to the Sphinx configuration."""
-    # if all(key in _globals for key in ("version", "release")):
-    #     return
-    # ver_tag_prefix = _meta["tag"]["version"]["prefix"]
-    # tags = _git.Git(path=_path_root).get_tags()
-    # ver = _semver.latest_version_from_tags(tags=tags, version_tag_prefix=ver_tag_prefix)
-    # if ver:
-    #     _globals["version"] = _globals.get("version") or f"{ver.major}.{ver.minor}"
-    #     _globals["release"] = _globals.get("release") or str(ver)
+    if all(key in _globals for key in ("version", "release")):
+        return
+    ver_tag_prefix = _meta["tag"]["version"]["prefix"]
+    tags = _git.Git(path=_path_root).get_tags()
+    ver = _semver.latest_version_from_tags(tags=tags, version_tag_prefix=ver_tag_prefix)
+    if ver:
+        _globals["version"] = _globals.get("version") or f"{ver.major}.{ver.minor}"
+        _globals["release"] = _globals.get("release") or str(ver)
     return
 
 
@@ -118,10 +119,10 @@ def _get_path_repo_root() -> tuple[_Path, str]:
     raise RuntimeError(error_msg)
 
 
-def _add_sphinx():
+def _add_sphinx() -> None:
     """Set sphinx main configurations."""
-    for key, value in _meta["web"]["sphinx"]["config"].items():
-        _globals[key] = value
+    _globals.update(_meta["web"]["sphinx"]["config"])
+    return
 
 
 def _merge_extra_config(
@@ -269,10 +270,7 @@ def _read_metadata() -> dict[str, Any]:
 
 def _add_html_context():
     """Add the HTML context to the Sphinx configuration."""
-    _globals["html_context"] = _globals.get("html_context", {}) | {
-        "pp_meta": _meta,
-        "pp_title_sep": _globals.get("html_secnumber_suffix"),
-    }
+    _globals.setdefault("html_context", {}).update({"pp_meta": _meta})
     return
 
 
@@ -307,13 +305,7 @@ _add_theme()
 _add_extensions()
 _add_ablog_blog_authors()
 _add_intersphinx_mapping()
-
-
-import rich as _rich
-
-_rich.print(dict(sorted(_globals.items())))
-
-
+_logger.info("Configurations", _logger.pretty(_globals))
 _add_html_context()
-
+_logger.info("HTML context", _logger.pretty(_globals["html_context"]))
 globals().update(_globals)
