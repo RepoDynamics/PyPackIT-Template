@@ -2,9 +2,9 @@
 
 from __future__ import annotations as _annotations
 
-from typing import TYPE_CHECKING as _TYPE_CHECKING
 import json as _json
 from pathlib import Path as _Path
+from typing import TYPE_CHECKING as _TYPE_CHECKING
 
 # import gittidy as _git
 # from versionman import pep440_semver as _semver
@@ -15,6 +15,7 @@ except (ImportError, ModuleNotFoundError):
 
 if _TYPE_CHECKING:
     from typing import Any
+
     from sphinx.application import Sphinx
 
 
@@ -108,8 +109,12 @@ def _get_path_repo_root() -> tuple[_Path, str]:
     for parent_dir in _Path(__file__).parents:
         num_up += 1
         for path in parent_dir.iterdir():
-            if path.is_dir() and path.name == ".github" and (parent_dir / _METADATA_FILEPATH).is_file():
-                return parent_dir, '../' * num_up
+            if (
+                path.is_dir()
+                and path.name == ".github"
+                and (parent_dir / _METADATA_FILEPATH).is_file()
+            ):
+                return parent_dir, "../" * num_up
     raise RuntimeError(error_msg)
 
 
@@ -181,7 +186,7 @@ def _add_theme() -> None:
     _merge_extra_config(
         config=_meta["web"]["theme"].get("config", {}),
         config_key="web.theme.config",
-        config_name="theme"
+        config_name="theme",
     )
     return
 
@@ -270,6 +275,7 @@ def _add_html_context():
     }
     return
 
+
 def _add_intersphinx_mapping():
     """Add intersphinx mappings to the Sphinx configuration."""
     mapping = _globals.get("intersphinx_mapping", {})
@@ -304,6 +310,7 @@ _add_intersphinx_mapping()
 
 
 import rich as _rich
+
 _rich.print(dict(sorted(_globals.items())))
 
 
