@@ -59,23 +59,34 @@ test:
       testing:
         name: Pytest
         import_name: pytest
-        description: |
-          Testing framework for Python.
+        description: Testing framework for Python.
         pip:
-          spec: pytest == 8.3.2
+          spec: pytest == 8.3.3
+        conda:
+          spec: pytest = 8.3.3
+          channel: conda-forge
         url:
           docs: https://docs.pytest.org/en/stable/
           source: https://github.com/pytest-dev/pytest
+          pip: https://pypi.org/project/pytest/
+          conda: https://anaconda.org/conda-forge/pytest
       coverage:
         name: Pytest-Cov
         import_name: pytest_cov
-        description: |
-          Pytest plugin for measuring test coverage.
+        description: Pytest plugin for measuring test coverage.
+        notes: |
+          This plugin uses the [coverage.py](https://github.com/nedbat/coveragepy) package
+          to measure code coverage.
         pip:
           spec: pytest-cov == 5.0.0
+        conda:
+          spec: pytest-cov = 5.0.0
+          channel: conda-forge
         url:
           docs: https://pytest-cov.readthedocs.io/
           source: https://github.com/pytest-dev/pytest-cov
+          pip: https://pypi.org/project/pytest-cov/
+          conda: https://anaconda.org/conda-forge/pytest-cov
   file:
     __init__.py:
       docstring: |
