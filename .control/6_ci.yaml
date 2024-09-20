@@ -192,9 +192,18 @@ tool:
     env:
       dependency:
         pylint:
+          name: Pylint
           import_name: pylint
           pip:
-            spec: pylint[spelling] >= 3.0, < 4
+            spec: pylint[spelling] == 3.3.0
+          conda:
+            spec: pylint = 3.3.0
+            channel: conda-forge
+          url:
+            docs: https://pylint.readthedocs.io/
+            source: https://github.com/pylint-dev/pylint
+            pip: https://pypi.org/project/pylint/
+            conda: https://anaconda.org/conda-forge/pylint
       file:
         conda: *conda_dev_env
         pip:
