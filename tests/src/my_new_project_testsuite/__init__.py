@@ -27,8 +27,8 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-from pathlib import Path
 import tempfile
+from pathlib import Path
 
 import pkgdata
 import pytest
@@ -81,9 +81,9 @@ def run(
             file_temp_path.write_text(config)
             if path.stem == "pytest":
                 path_pytest_config = file_temp_path
-        final_args = [f'--rootdir={path_root}']
+        final_args = [f"--rootdir={path_root}"]
         if path_pytest_config:
-            final_args.append(f'--config-file={path_pytest_config}')
+            final_args.append(f"--config-file={path_pytest_config}")
         if args:
             final_args.extend(args)
         if overrides:
