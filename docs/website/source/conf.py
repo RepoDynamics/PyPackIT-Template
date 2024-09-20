@@ -8,6 +8,10 @@ from pathlib import Path as _Path
 
 # import gittidy as _git
 # from versionman import pep440_semver as _semver
+try:
+    from intersphinx_registry import get_intersphinx_mapping as _get_intersphinx_mapping
+except (ImportError, ModuleNotFoundError):
+    _get_intersphinx_mapping = None
 
 if _TYPE_CHECKING:
     from typing import Any
@@ -266,6 +270,27 @@ def _add_html_context():
     }
     return
 
+def _add_intersphinx_mapping():
+    """Add intersphinx mappings to the Sphinx configuration."""
+    mapping = _globals.get("intersphinx_mapping", {})
+    if not mapping:
+        return
+    error_msg = (
+        "Intersphinx mapping value for key '{key}' is not set. "
+        "Mapping values can only be omitted if `intersphinx_registry` is installed."
+    )
+    to_get = []
+    for key, val in mapping.items():
+        if not val:
+            if not _get_intersphinx_mapping:
+                raise RuntimeError(error_msg.format(key=key))
+            to_get.append(key)
+    if not to_get:
+        return
+    mapping_addon = _get_intersphinx_mapping(packages=set(error_msg))
+    mapping.update(mapping_addon)
+    return
+
 
 _path_root, _path_to_root = _get_path_repo_root()
 _meta = _read_metadata()
@@ -275,6 +300,7 @@ _add_css_and_js_files()
 _add_theme()
 _add_extensions()
 _add_ablog_blog_authors()
+_add_intersphinx_mapping()
 
 
 import rich as _rich
