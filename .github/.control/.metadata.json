@@ -2185,7 +2185,7 @@
                "import_name": "pkgdata",
                "name": "PkgData",
                "pip": {
-                  "spec": "pkgdata >= 0.1, < 0.2"
+                  "spec": "pkgdata"
                },
                "url": {
                   "docs": "https://pkgdata.repodynamics.com/",
@@ -2530,8 +2530,7 @@
          },
          "pkg_source": {
             "my_new_project/__init__.py": "pkg/src/my_new_project/__init__.py",
-            "my_new_project/_util/__init__.py": "pkg/src/my_new_project/_util/__init__.py",
-            "my_new_project/_util/file.py": "pkg/src/my_new_project/_util/file.py"
+            "my_new_project/data/__init__.py": "pkg/src/my_new_project/data/__init__.py"
          },
          "pull_template": {
             "default": ".github/pull_request_template.md"
@@ -2548,19 +2547,20 @@
          "test_source": {
             "my_new_project_testsuite/__init__.py": "tests/src/my_new_project_testsuite/__init__.py",
             "my_new_project_testsuite/__main__.py": "tests/src/my_new_project_testsuite/__main__.py",
-            "my_new_project_testsuite/general_tests.py": "tests/src/my_new_project_testsuite/general_tests.py"
+            "my_new_project_testsuite/data_tests.py": "tests/src/my_new_project_testsuite/data_tests.py"
          },
          "tool_config": {
             "codecov": ".github/.codecov.yml",
+            "coverage": "tests/src/my_new_project_testsuite/data/config/coverage.toml",
             "pre-commit": ".github/.pre-commit-config.yaml",
+            "pytest": "tests/src/my_new_project_testsuite/data/config/pytest.toml",
             "readthedocs": ".readthedocs.yaml",
             "ruff": ".github/.ruff.toml"
          },
          "tool_env_conda": {
-            "pre-commit_pylint_mypy_bandit_ruff": ".github/dev_environment.yaml"
+            "pre-commit_pylint_mypy": ".github/dev_environment.yaml"
          },
          "tool_env_pip": {
-            "bandit": ".github/workflow_requirements/bandit.txt",
             "mypy": ".github/workflow_requirements/mypy.txt",
             "pylint": ".github/workflow_requirements/pylint.txt"
          },
@@ -3286,7 +3286,8 @@
          }
       ],
       "gitignore": [
-         "docs/website/source/.build/",
+         "docs/website/.build/",
+         "docs/website/source/api/**/*",
          "__pycache__/",
          "*.py[cod]",
          "*$py.class",
@@ -3545,26 +3546,84 @@
       "dependency": {
          "core": {
             "coverage": {
-               "description": "Pytest plugin for measuring test coverage.\n",
+               "conda": {
+                  "channel": "conda-forge",
+                  "spec": "coverage = 7.6.1"
+               },
+               "description": "Code coverage measurement for Python.",
+               "import_name": "coverage",
+               "name": "Coverage.py",
+               "notes": "This is indirectly used by the `pytest-cov` plugin.\nHowever, we include it explicitly here to pin the version for reproducibility.\n",
+               "pip": {
+                  "spec": "coverage == 7.6.1"
+               },
+               "url": {
+                  "conda": "https://anaconda.org/conda-forge/coverage",
+                  "docs": "https://coverage.readthedocs.io/",
+                  "pip": "https://pypi.org/project/coverage/",
+                  "source": "https://github.com/nedbat/coveragepy"
+               }
+            },
+            "pkgdata": {
+               "description": "Handling package resources, such as accessing data files that are distributed with the package.",
+               "import_name": "pkgdata",
+               "name": "PkgData",
+               "pip": {
+                  "spec": "pkgdata"
+               }
+            },
+            "plugin_cov": {
+               "conda": {
+                  "channel": "conda-forge",
+                  "spec": "pytest-cov = 5.0.0"
+               },
+               "description": "Pytest plugin for measuring test coverage.",
                "import_name": "pytest_cov",
                "name": "Pytest-Cov",
+               "notes": "This plugin uses the [coverage.py](https://github.com/nedbat/coveragepy) package\nto measure code coverage.\n",
                "pip": {
                   "spec": "pytest-cov == 5.0.0"
                },
                "url": {
+                  "conda": "https://anaconda.org/conda-forge/pytest-cov",
                   "docs": "https://pytest-cov.readthedocs.io/",
+                  "pip": "https://pypi.org/project/pytest-cov/",
                   "source": "https://github.com/pytest-dev/pytest-cov"
                }
             },
+            "plugin_html": {
+               "conda": {
+                  "channel": "conda-forge",
+                  "spec": "pytest-html = 4.1.1"
+               },
+               "description": "Pytest plugin for generating HTML reports.",
+               "import_name": "pytest_html",
+               "name": "Pytest-HTML",
+               "pip": {
+                  "spec": "pytest-html == 4.1.1"
+               },
+               "url": {
+                  "conda": "https://anaconda.org/conda-forge/pytest-html",
+                  "docs": "https://pytest-html.readthedocs.io/",
+                  "pip": "https://pypi.org/project/pytest-html/",
+                  "source": "https://github.com/pytest-dev/pytest-html"
+               }
+            },
             "testing": {
-               "description": "Testing framework for Python.\n",
+               "conda": {
+                  "channel": "conda-forge",
+                  "spec": "pytest = 8.3.3"
+               },
+               "description": "Testing framework for Python.",
                "import_name": "pytest",
                "name": "Pytest",
                "pip": {
-                  "spec": "pytest == 8.3.2"
+                  "spec": "pytest == 8.3.3"
                },
                "url": {
+                  "conda": "https://anaconda.org/conda-forge/pytest",
                   "docs": "https://docs.pytest.org/en/stable/",
+                  "pip": "https://pypi.org/project/pytest/",
                   "source": "https://github.com/pytest-dev/pytest"
                }
             }
@@ -3748,33 +3807,6 @@
    },
    "title": "A Placeholder Project Title",
    "tool": {
-      "bandit": {
-         "env": {
-            "dependency": {
-               "bandit": {
-                  "import_name": "bandit",
-                  "pip": {
-                     "spec": "bandit[toml]"
-                  }
-               },
-               "sarif": {
-                  "import_name": "bandit_sarif_formatter",
-                  "pip": {
-                     "spec": "bandit-sarif-formatter"
-                  }
-               }
-            },
-            "file": {
-               "conda": {
-                  "name": "PyPackIT-Template-dev",
-                  "path": ".github/dev_environment.yaml"
-               },
-               "pip": {
-                  "path": ".github/workflow_requirements/bandit.txt"
-               }
-            }
-         }
-      },
       "codecov": {
          "config": {
             "file": {
@@ -3810,7 +3842,12 @@
                   "tool": {
                      "coverage": {
                         "html": {
-                           "directory": ".local/report/coverage"
+                           "directory": "$|| path_report ||/coverage/html",
+                           "title": "My-New-Project Test Coverage"
+                        },
+                        "json": {
+                           "output": "$|| path_report ||/coverage/coverage.json",
+                           "pretty_print": true
                         },
                         "report": {
                            "exclude_also": [
@@ -3820,24 +3857,26 @@
                               "raise NotImplementedError",
                               "if 0:",
                               "if __name__ == .__main__.:",
-                              "@(abc\\.)?abstractmethod"
+                              "@(abc\\.)?abstractmethod",
+                              "if _?TYPE_CHECKING:"
                            ],
                            "show_missing": true
                         },
                         "run": {
                            "branch": true,
-                           "data_file": ".local/cache/coverage/.coverage",
+                           "data_file": "$|| path_cache ||/coverage/coverage",
+                           "debug_file": "$|| path_report ||/coverage/debug.log",
                            "source_pkgs": [
                               "my_new_project"
                            ]
                         },
                         "xml": {
-                           "output": ".local/report/coverage/coverage.xml"
+                           "output": "$|| path_report ||/coverage/coverage.xml"
                         }
                      }
                   }
                },
-               "path": "tests/pyproject.toml",
+               "path": "tests/src/my_new_project_testsuite/data/config/coverage.toml",
                "type": "toml"
             }
          }
@@ -3877,15 +3916,26 @@
          "env": {
             "dependency": {
                "mypy": {
+                  "conda": {
+                     "channel": "conda-forge",
+                     "spec": "mypy = 1.11.2"
+                  },
                   "import_name": "mypy",
+                  "name": "Mypy",
                   "pip": {
-                     "spec": "mypy[reports] >= 1.8, < 2"
+                     "spec": "mypy[reports] == 1.11.2"
+                  },
+                  "url": {
+                     "conda": "https://anaconda.org/conda-forge/mypy",
+                     "docs": "https://mypy.readthedocs.io/",
+                     "pip": "https://pypi.org/project/mypy/",
+                     "source": "https://github.com/python/mypy"
                   }
                }
             },
             "file": {
                "conda": {
-                  "name": "PyPackIT-Template-dev",
+                  "name": "my-new-project-dev",
                   "path": ".github/dev_environment.yaml"
                },
                "pip": {
@@ -4026,7 +4076,7 @@
                               "args": [
                                  "--autofix",
                                  "--indent",
-                                 3
+                                 "3"
                               ],
                               "id": "pretty-format-json",
                               "stages": [
@@ -4090,7 +4140,7 @@
                            }
                         ],
                         "repo": "https://github.com/astral-sh/ruff-pre-commit",
-                        "rev": "v0.6.5"
+                        "rev": "v0.6.6"
                      }
                   ]
                },
@@ -4101,18 +4151,27 @@
          "env": {
             "dependency": {
                "pre_commit": {
+                  "conda": {
+                     "channel": "conda-forge",
+                     "spec": "pre-commit = 3.8.0"
+                  },
+                  "description": "Running formatting and linting checks.",
                   "import_name": "pre_commit",
+                  "name": "Pre-Commit",
                   "pip": {
                      "spec": "pre-commit == 3.8.0"
                   },
                   "url": {
-                     "docs": "https://pre-commit.com/"
+                     "conda": "https://anaconda.org/conda-forge/pre_commit",
+                     "docs": "https://pre-commit.com/",
+                     "pip": "https://pypi.org/project/pre-commit/",
+                     "source": "https://github.com/pre-commit/pre-commit"
                   }
                }
             },
             "file": {
                "conda": {
-                  "name": "PyPackIT-Template-dev",
+                  "name": "my-new-project-dev",
                   "path": ".github/dev_environment.yaml"
                }
             }
@@ -4122,15 +4181,26 @@
          "env": {
             "dependency": {
                "pylint": {
+                  "conda": {
+                     "channel": "conda-forge",
+                     "spec": "pylint = 3.3.0"
+                  },
                   "import_name": "pylint",
+                  "name": "Pylint",
                   "pip": {
-                     "spec": "pylint[spelling] >= 3.0, < 4"
+                     "spec": "pylint[spelling] == 3.3.0"
+                  },
+                  "url": {
+                     "conda": "https://anaconda.org/conda-forge/pylint",
+                     "docs": "https://pylint.readthedocs.io/",
+                     "pip": "https://pypi.org/project/pylint/",
+                     "source": "https://github.com/pylint-dev/pylint"
                   }
                }
             },
             "file": {
                "conda": {
-                  "name": "PyPackIT-Template-dev",
+                  "name": "my-new-project-dev",
                   "path": ".github/dev_environment.yaml"
                },
                "pip": {
@@ -4146,9 +4216,10 @@
                   "tool": {
                      "pytest": {
                         "ini_options": {
-                           "addopts": "-r a --verbose --color=yes --full-trace --cov --cov-config=pyproject.toml --cov-report=term-missing:skip-covered --cov-report=html --cov-report=xml --strict-config --strict-markers --junit-xml=.local/report/pytest/junit.xml",
-                           "cache_dir": ".local/cache/pytest",
+                           "addopts": "-r a --verbose --color=yes --full-trace --strict-config --junit-xml='$|| path_report ||/pytest/junit.xml' --import-mode=importlib --debug='$|| path_report ||/pytest/debug.log' --cov --cov-config='$|| path_config ||/coverage.toml' --cov-report=term-missing:skip-covered --cov-report=html --cov-report=xml --cov-report=json --html='$|| path_report ||/pytest/report.html' --self-contained-html",
+                           "cache_dir": "$|| path_cache ||/pytest",
                            "console_output_style": "count",
+                           "junit_logging": "all",
                            "junit_suite_name": "my_new_project_testsuite",
                            "log_auto_indent": true,
                            "log_cli": true,
@@ -4156,13 +4227,13 @@
                            "log_cli_format": "%(levelname)s %(message)s",
                            "log_cli_level": "INFO",
                            "log_date_format": "%Y-%m-%d %H:%M:%S",
-                           "log_file": ".local/report/pytest/log.txt",
+                           "log_file": "$|| path_report ||/pytest/log.txt",
                            "log_file_date_format": "%Y-%m-%d %H:%M:%S",
                            "log_file_format": "%(asctime)s %(levelname)s %(message)s",
                            "log_file_level": "DEBUG",
                            "log_format": "%(asctime)s %(levelname)s %(message)s",
                            "log_level": "DEBUG",
-                           "minversion": "8.3",
+                           "minversion": "8.3.3",
                            "python_classes": [
                               "Test*",
                               "*Test"
@@ -4180,16 +4251,14 @@
                               "*_tests"
                            ],
                            "required_plugins": [
-                              "pytest-cov>=5.0.0,<6"
-                           ],
-                           "testpaths": [
-                              "src"
+                              "pytest-cov == 5.0.0",
+                              "pytest-html == 4.1.1"
                            ]
                         }
                      }
                   }
                },
-               "path": "tests/pyproject.toml",
+               "path": "tests/src/my_new_project_testsuite/data/config/pytest.toml",
                "type": "toml"
             }
          }
@@ -4363,7 +4432,7 @@
                      ]
                   },
                   "output-format": "grouped",
-                  "required-version": "== 0.6.5",
+                  "required-version": "== 0.6.6",
                   "show-fixes": true,
                   "src": [
                      "pkg/src",
@@ -4373,22 +4442,6 @@
                },
                "path": ".github/.ruff.toml",
                "type": "toml"
-            }
-         },
-         "env": {
-            "dependency": {
-               "ruff": {
-                  "import_name": "ruff",
-                  "pip": {
-                     "spec": "ruff == 0.6.2"
-                  }
-               }
-            },
-            "file": {
-               "conda": {
-                  "name": "PyPackIT-Template-dev",
-                  "path": ".github/dev_environment.yaml"
-               }
             }
          }
       }
@@ -4415,6 +4468,22 @@
                },
                "url": {
                   "docs": "https://gittidy.repodynamics.com"
+               }
+            },
+            "intersphinx_registry": {
+               "conda": {
+                  "channel": "conda-forge",
+                  "spec": "intersphinx-registry"
+               },
+               "description": "Registry of intersphinx mappings for external documentation.\n",
+               "import_name": "intersphinx_registry",
+               "pip": {
+                  "spec": "intersphinx_registry"
+               },
+               "url": {
+                  "conda": "https://anaconda.org/conda-forge/intersphinx-registry",
+                  "pip": "https://pypi.org/project/intersphinx_registry/",
+                  "source": "https://github.com/Quansight-labs/intersphinx_registry"
                }
             },
             "librsvg": {
@@ -4517,12 +4586,17 @@
          },
          "autodoc2": {
             "config": {
+               "autodoc2_hidden_objects": [
+                  "private",
+                  "inherited"
+               ],
                "autodoc2_index_template": null,
                "autodoc2_output_dir": "api",
                "autodoc2_packages": [
                   "../../../pkg/src/my_new_project"
                ],
-               "autodoc2_render_plugin": "myst"
+               "autodoc2_render_plugin": "myst",
+               "autodoc2_sort_names": true
             },
             "dependency": {
                "description": "Automatically generating Python API documentation from docstrings.",
@@ -4818,6 +4892,11 @@
             "title": "About",
             "url": "https://RepoDynamics.github.io/PyPackIT-Template/about"
          },
+         "api": {
+            "path": "api",
+            "title": "API Reference",
+            "url": "https://RepoDynamics.github.io/PyPackIT-Template/api"
+         },
          "blog": {
             "path": "news",
             "title": "News",
@@ -4850,7 +4929,7 @@
          },
          "contribute": {
             "path": "contribute",
-            "title": "Contribute",
+            "title": "Contribution Guide",
             "url": "https://RepoDynamics.github.io/PyPackIT-Template/contribute"
          },
          "help": {
@@ -4865,12 +4944,12 @@
          },
          "intro": {
             "path": "intro",
-            "title": "Intro",
+            "title": "Introduction",
             "url": "https://RepoDynamics.github.io/PyPackIT-Template/intro"
          },
          "manual": {
             "path": "manual",
-            "title": "Manual",
+            "title": "User Manual",
             "url": "https://RepoDynamics.github.io/PyPackIT-Template/manual"
          },
          "overview": {
@@ -5014,18 +5093,13 @@
             "intersphinx": {
                "config": {
                   "intersphinx_mapping": {
-                     "matplotlib": [
-                        "https://matplotlib.org/stable/",
-                        null
-                     ],
-                     "numpy": [
-                        "https://numpy.org/doc/stable/",
-                        null
-                     ],
+                     "matplotlib": null,
+                     "numpy": null,
                      "python": [
                         "https://docs.python.org/3/",
                         null
-                     ]
+                     ],
+                     "scipy": null
                   }
                },
                "dependency": {
