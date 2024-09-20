@@ -130,7 +130,7 @@ repo:
   gitignore:
     # Project-specific files
     - ${{ web.path.root }}/.build/
-
+    - ${{ web.path.root }}/${{ web.path.source }}/${{ web.page.api.path }}/**/*
     # Byte-compiled / optimized / DLL files
     - __pycache__/
     - "*.py[cod]"
