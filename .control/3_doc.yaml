@@ -353,9 +353,13 @@ web:
             docs: https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html
         config:
           intersphinx_mapping:
+            # When `intersphinx_registry` (see `env` key) is used,
+            # you can specify keys without values;
+            # these will be automatically filled in by the registry.
             python: [ 'https://docs.python.org/3/', null ]
-            numpy: [ 'https://numpy.org/doc/stable/', null ]
-            matplotlib: [ 'https://matplotlib.org/stable/', null ]
+            numpy: null
+            scipy: null
+            matplotlib: null
   theme:
     dependency:
       import_name: pydata_sphinx_theme
@@ -764,5 +768,18 @@ web:
         url:
           docs: https://wiki.gnome.org/Projects/LibRsvg
           source: https://gitlab.gnome.org/GNOME/librsvg
+      intersphinx_registry:
+        import_name: intersphinx_registry
+        description: |
+          Registry of intersphinx mappings for external documentation.
+        url:
+          source: https://github.com/Quansight-labs/intersphinx_registry
+          pip: https://pypi.org/project/intersphinx_registry/
+          conda: https://anaconda.org/conda-forge/intersphinx-registry
+        pip:
+          spec: intersphinx_registry
+        conda:
+          spec: intersphinx-registry
+          channel: conda-forge
 announcement:
   path: ${{ web.path.root }}/announcement.html
