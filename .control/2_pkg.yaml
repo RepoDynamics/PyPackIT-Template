@@ -36,9 +36,9 @@ pkg:
     __init__.py:
       docstring: |
         ${{name}}: ${{title}}
-        
+
         Copyright ${{copyright.notice}}
-        
+
         ${{abstract}}
 
         ${{license.notice}}
@@ -128,9 +128,9 @@ test:
     __init__.py:
       docstring: |
         ${{ name }} Test-Suite
-        
+
         Copyright ${{copyright.notice}}
-        
+
         ${{abstract}}
 
         ${{license.notice}}
