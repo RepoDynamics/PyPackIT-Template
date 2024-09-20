@@ -266,15 +266,18 @@ tool:
                   --verbose
                   --color=yes
                   --full-trace
+                  --strict-config
+                  --junit-xml='$|| path_report ||/pytest/junit.xml'
+                  --import-mode=importlib
+                  --debug='$|| path_report ||/pytest/debug.log'
                   --cov
                   --cov-config='$|| path_config ||/coverage.toml'
                   --cov-report=term-missing:skip-covered
                   --cov-report=html
                   --cov-report=xml
-                  --strict-config
-                  --junit-xml='$|| path_report ||/pytest/junit.xml'
-                  --import-mode=importlib
-                  --debug='$|| path_report ||/pytest/debug.log'
+                  --cov-report=json
+                  --html='$|| path_report ||/pytest/report.html'
+                  --self-contained-html
                 cache_dir: $|| path_cache ||/pytest
                 console_output_style: count
                 junit_logging: all
@@ -291,12 +294,12 @@ tool:
                 log_file_level: DEBUG
                 log_format: '%(asctime)s %(levelname)s %(message)s'
                 log_level: DEBUG
-                minversion: '8.3'
-                python_classes: ["Test*", "*Test"]
-                python_files: ["test_*.py", "tests_*.py", "*_test.py", "*_tests.py"]
-                python_functions: ["test_*", "tests_*", "*_test", "*_tests"]
+                minversion: 8.3.3
+                python_classes: [ Test*, '*Test' ]
+                python_files: [ test_*.py, tests_*.py, '*_test.py', '*_tests.py' ]
+                python_functions: [ 'test_*', 'tests_*', '*_test',  '*_tests' ]
                 required_plugins:
-                  - pytest-cov>=5.0.0,<6
+                  - pytest-cov == 5.0.0
   coverage:
     # pytest-cov / Coverage.py
     # Ref: https://pytest-cov.readthedocs.io/en/latest/config.html
@@ -327,18 +330,15 @@ tool:
                 - "if __name__ == .__main__.:"
                 # Don't complain about abstract methods, they aren't run:
                 - "@(abc\\.)?abstractmethod"
-                format: markdown
                 show_missing: true
               html:
                 directory: $|| path_report ||/coverage/html
-                show_contexts: true
                 title: "${{ pkg.name }} Test Coverage"
               xml:
                 output: $|| path_report ||/coverage/coverage.xml
               json:
                 output: $|| path_report ||/coverage/coverage.json
                 pretty_print: true
-                show_contexts: true
   ruff:
     env:
       dependency:
