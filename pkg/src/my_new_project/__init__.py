@@ -1,26 +1,6 @@
-"""Main docstring."""
+__version_details__: dict[str, str | tuple] = {"version": "0.0.0"}
+"""Details of the currently installed version,
+including version number, date, branch, and commit hash."""
 
-__version_details__ = {"version": "0.0.0"}
-"""Version details."""
-
-__version__ = __version_details__["version"]
-
-
-def f(x: int) -> int:
-    """Function f.
-
-    Parameters
-    ----------
-    x : int
-        The input value.
-
-    Returns
-    -------
-    int
-        The output value.
-
-    References
-    ----------
-    - https://www.example.com
-    """
-    return x + 1
+__version__: str = __version_details__["version"]
+"""Version number of the currently installed package."""
