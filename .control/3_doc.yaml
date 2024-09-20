@@ -286,6 +286,7 @@ web:
       html_show_sphinx: false
       html_math_renderer: mathjax
       html_context:
+        # Used by the Giscus template to extract page title
         pp_title_sep: ${{ web.sphinx.config.html_secnumber_suffix }}
       html_last_updated_fmt: '%b %d, %Y'
       language: en
