@@ -1,6 +1,7 @@
 """Exceptions raised by the data module."""
 
 from __future__ import annotations as _annotations
+
 from typing import TYPE_CHECKING as _TYPE_CHECKING
 
 from my_new_project.exception import PackageException as _PackageException
