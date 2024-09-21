@@ -391,11 +391,21 @@ tool:
               - COM819
               - ISC001
               - ISC002
+              # Deprecated rules
+              - ANN101
+              - ANN102
             per-file-ignores:
               '${{ test.path.root }}/${{ test.path.source }}/**':
                 - S101
               '${{ web.path.root }}/${{ web.path.source }}/conf.py':
                 - TRY003  # https://docs.astral.sh/ruff/rules/raise-vanilla-args/#raise-vanilla-args-try003
+              # https://docs.astral.sh/ruff/rules/#flake8-print-t20
+              '${{ pkg.path.import }}/__main__.py':
+                - T20
+              '${{ test.path.import }}/__main__.py':
+                - T20
+              '${{ test.path.import }}/__init__.py':
+                - T20
             select:
               # https://docs.astral.sh/ruff/rules
               - F      # pyflakes
