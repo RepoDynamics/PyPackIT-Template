@@ -1,21 +1,3 @@
-"""My New Project Test-Suite.
-
-Copyright (C) 2024 RepoDynamics
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published
-by the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-"""
-
 import tempfile
 from pathlib import Path
 
@@ -36,10 +18,53 @@ def run(
 
     Parameters
     ----------
-    path_root
-        Path to the root directory.
-    path_config
-        Path to the PyTest configuration file.
+    pyargs
+        Fully qualified names of test cases to run.
+        These can be sub-packages, modules, classes, or individual test functions
+        in the test-suite. If not provided, the entire test-suite will be run.
+    args
+        Additional command-line arguments to pass to pytest.
+    overrides
+        Configuration options to override in the default pytest configuration file.
+        These should be specified as key-value pairs, corresponding to the configuration
+        option name and the new value, respectively.
+        They are passed to pytest as `--override-ini {KEY}={VALUE}` arguments.
+    path_cache
+        Path to the directory where cache files will be stored.
+        If not provided, a temporary directory will be created
+        and automatically cleaned up after the test-suite is run.
+    path_report
+        Path to the directory where test reports will be stored.
+        If not provided, a temporary directory will be created
+        and automatically cleaned up after the test-suite is run.
+    template_start
+        Start marker of the template string used in the configuration files
+        to inject dynamic values.
+    template_end
+        End marker of the template string used in the configuration files
+        to inject dynamic values.
+
+    Returns
+    -------
+    Exit code of PyTest. This is 0 if the test suite ran successfully and all tests passed.
+    Otherwise, it is a non-zero value indicating the type of failure.
+
+    Notes
+    -----
+    For templating, the supported keys are:
+    - `path_report`: Path to the directory where test reports will be stored.
+    - `path_cache`: Path to the directory where cache files will be stored.
+    - `path_config`: Path to the directory
+       where PyTest and its plugins look for configuration files.
+       Test-suite configuration files are stored internally as data files within the package.
+       Each time the test suite is run, it uses its current path to update the
+       `path_config` variable in the configuration files,
+       so that PyTest and its plugins can find them regardless of
+       the current working directory.
+    For each value, the template string should be formatted as
+    `{template_start}{key}{template_end}`,
+    so for example if `template_start` is `"$|| "` and `template_end` is " ||",
+    the template string for `path_report` would be `$|| path_report ||`.
     """
     path_root = pkgdata.get_package_path_from_caller(top_level=True).resolve()
     path_config = path_root / "data" / "config"

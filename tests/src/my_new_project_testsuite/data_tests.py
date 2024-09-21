@@ -3,6 +3,7 @@
 import pytest
 
 import my_new_project as pkg
+from my_new_project.exception.data import DataFileNotFoundError
 
 
 def test_file():
@@ -20,5 +21,5 @@ def test_file():
 
 def test_no_file():
     """Test that an error is raised when the input data file is missing."""
-    with pytest.raises(FileNotFoundError):
+    with pytest.raises(DataFileNotFoundError):
         pkg.data.get("path/to/nonexistent/file")

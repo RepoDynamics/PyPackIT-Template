@@ -1,4 +1,4 @@
-"""Retrieve package data files."""
+"""Functions for retrieving package data files."""
 
 from __future__ import annotations as _annotations
 
