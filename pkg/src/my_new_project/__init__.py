@@ -1,6 +1,4 @@
-"""My New Project: A Placeholder Project Title
-
-Copyright 2024 RepoDynamics
+"""My New Project: A Placeholder Project Title.
 
 Replace this text with a short abstract of My New Project, describing its
 purpose and main features. By default, this text is displayed on the
@@ -25,7 +23,7 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
-"""  # noqa: D401
+"""
 
 from my_new_project import data
 
