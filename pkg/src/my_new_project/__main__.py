@@ -1,4 +1,4 @@
-"""Main command-line interface of the package."""  # noqa: D401
+"""Main command-line interface of the package."""
 
 import argparse
 import sys
@@ -7,7 +7,7 @@ from my_new_project import __version__
 
 
 def main() -> int:
-    """Main command-line interface of the package."""
+    """Run the main command-line interface of the package."""
     # AUTOCODE START: cli
     cli_description: str = "Command-line interface for the package."
     cli_greeting: str = "Welcome to the package's command-line interface!"
