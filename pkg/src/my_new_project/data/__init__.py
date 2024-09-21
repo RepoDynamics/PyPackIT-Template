@@ -24,6 +24,7 @@ def get(relative_path: str) -> Path:
     filepath = path_data_dir / relative_path
     if not filepath.is_file():
         from my_new_project.exception.data import DataFileNotFoundError
+
         raise DataFileNotFoundError(
             path_relative=relative_path,
             path_absolute=filepath,
