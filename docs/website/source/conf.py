@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING as _TYPE_CHECKING
 import gittidy as _git
 from loggerman import logger as _logger
 from versionman import pep440_semver as _semver
+
 try:
     from intersphinx_registry import get_intersphinx_mapping as _get_intersphinx_mapping
 except (ImportError, ModuleNotFoundError):
