@@ -1,4 +1,4 @@
-"""Main command-line interface of the package."""
+"""Main command-line interface of the package."""  # noqa: D401
 
 import argparse
 import sys
@@ -6,9 +6,8 @@ import sys
 from my_new_project import __version__
 
 
-def main():
+def main() -> int:
     """Main command-line interface of the package."""
-
     # AUTOCODE START: cli
     cli_description: str = "Command-line interface for the package."
     cli_greeting: str = "Welcome to the package's command-line interface!"
@@ -17,16 +16,18 @@ def main():
 
     parser = argparse.ArgumentParser(description=cli_description)
     parser.add_argument(
-        '--version',
-        action='version',
-        version=f'%(prog)s {__version__}',
-        help="Show the current version of the package."
+        "--version",
+        action="version",
+        version=f"%(prog)s {__version__}",
+        help="Show the current version of the package.",
     )
     args = parser.parse_args()
     if not vars(args):
+        if cli_logo:
+            print(cli_logo)
         print(cli_greeting)
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())
