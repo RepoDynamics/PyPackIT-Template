@@ -1052,7 +1052,7 @@
                   },
                   {
                      "attributes": {
-                        "value": "### The thrilling conclusion\n_to our template_"
+                        "value": "### The thrilling conclusion\n_to our template_\n"
                      },
                      "type": "markdown"
                   }
@@ -2214,12 +2214,12 @@
       },
       "file": {
          "__init__.py": {
-            "docstring": "My New Project: A Placeholder Project Title\n\nCopyright 2024 RepoDynamics\n\nReplace this text with a short abstract of My New Project, describing its purpose and main features. By default, this text is displayed on the repository's main README file, on the homepage of the project's website, on the project's PyPI and TestPyPI pages, and on the package's main docstring. Like all other entries in the repository's control center, this text can also contain dynamic references to other entries, using the <code>${\u200e{ json-path.to.value }}</code> syntax. By default, the first occurrence of the name of the project in this text is styled as strong and linked to the project's website.\n\nCopyright (C) 2024 RepoDynamics\n\nThis program is free software: you can redistribute it and/or modify\nit under the terms of the GNU Affero General Public License as published\nby the Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU Affero General Public License for more details.\n\nYou should have received a copy of the GNU Affero General Public License\nalong with this program.  If not, see <https://www.gnu.org/licenses/>.\n\n"
+            "docstring": "My New Project: A Placeholder Project Title.\n\nReplace this text with a short abstract of My New Project, describing its purpose and main features. By default, this text is displayed on the repository's main README file, on the homepage of the project's website, on the project's PyPI and TestPyPI pages, and on the package's main docstring. Like all other entries in the repository's control center, this text can also contain dynamic references to other entries, using the <code>${\u200e{ json-path.to.value }}</code> syntax. By default, the first occurrence of the name of the project in this text is styled as strong and linked to the project's website.\n\nCopyright (C) 2024 RepoDynamics\n\nThis program is free software: you can redistribute it and/or modify\nit under the terms of the GNU Affero General Public License as published\nby the Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU Affero General Public License for more details.\n\nYou should have received a copy of the GNU Affero General Public License\nalong with this program.  If not, see <https://www.gnu.org/licenses/>.\n\n"
          }
       },
       "import_name": "my_new_project",
       "manifest": [
-         "graft src/my_new_project",
+         "graft src/my_new_project/data",
          "global-exclude *.py[cod] __pycache__ *.so"
       ],
       "name": "My-New-Project",
@@ -2530,7 +2530,10 @@
          },
          "pkg_source": {
             "my_new_project/__init__.py": "pkg/src/my_new_project/__init__.py",
-            "my_new_project/data/__init__.py": "pkg/src/my_new_project/data/__init__.py"
+            "my_new_project/__main__.py": "pkg/src/my_new_project/__main__.py",
+            "my_new_project/data/__init__.py": "pkg/src/my_new_project/data/__init__.py",
+            "my_new_project/exception/__init__.py": "pkg/src/my_new_project/exception/__init__.py",
+            "my_new_project/exception/data.py": "pkg/src/my_new_project/exception/data.py"
          },
          "pull_template": {
             "default": ".github/pull_request_template.md"
@@ -2541,6 +2544,7 @@
          "test_config": {
             "env_conda": "tests/conda_env.yaml",
             "env_pip": "tests/requirements.txt",
+            "manifest": "tests/MANIFEST.in",
             "pyproject": "tests/pyproject.toml",
             "typed": "tests/src/my_new_project_testsuite/py.typed"
          },
@@ -3640,10 +3644,14 @@
       },
       "file": {
          "__init__.py": {
-            "docstring": "My New Project Test-Suite\n\nCopyright 2024 RepoDynamics\n\nReplace this text with a short abstract of My New Project, describing its purpose and main features. By default, this text is displayed on the repository's main README file, on the homepage of the project's website, on the project's PyPI and TestPyPI pages, and on the package's main docstring. Like all other entries in the repository's control center, this text can also contain dynamic references to other entries, using the <code>${\u200e{ json-path.to.value }}</code> syntax. By default, the first occurrence of the name of the project in this text is styled as strong and linked to the project's website.\n\nCopyright (C) 2024 RepoDynamics\n\nThis program is free software: you can redistribute it and/or modify\nit under the terms of the GNU Affero General Public License as published\nby the Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU Affero General Public License for more details.\n\nYou should have received a copy of the GNU Affero General Public License\nalong with this program.  If not, see <https://www.gnu.org/licenses/>.\n\n"
+            "docstring": "My New Project Test-Suite.\n\nCopyright (C) 2024 RepoDynamics\n\nThis program is free software: you can redistribute it and/or modify\nit under the terms of the GNU Affero General Public License as published\nby the Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU Affero General Public License for more details.\n\nYou should have received a copy of the GNU Affero General Public License\nalong with this program.  If not, see <https://www.gnu.org/licenses/>.\n\n"
          }
       },
       "import_name": "my_new_project_testsuite",
+      "manifest": [
+         "graft src/my_new_project_testsuite/data",
+         "global-exclude *.py[cod] __pycache__ *.so"
+      ],
       "name": "My-New-Project-TestSuite",
       "os": {
          "linux": {
@@ -4350,7 +4358,9 @@
                         "COM812",
                         "COM819",
                         "ISC001",
-                        "ISC002"
+                        "ISC002",
+                        "ANN101",
+                        "ANN102"
                      ],
                      "mccabe": {
                         "max-complexity": 15
@@ -4359,8 +4369,17 @@
                         "docs/website/source/conf.py": [
                            "TRY003"
                         ],
+                        "pkg/src/my_new_project/__main__.py": [
+                           "T20"
+                        ],
                         "tests/src/**": [
                            "S101"
+                        ],
+                        "tests/src/my_new_project_testsuite/__init__.py": [
+                           "T20"
+                        ],
+                        "tests/src/my_new_project_testsuite/__main__.py": [
+                           "T20"
                         ]
                      },
                      "pydocstyle": {
@@ -4491,7 +4510,7 @@
                   "channel": "conda-forge",
                   "spec": "librsvg"
                },
-               "description": "Library for rendering SVG files and using them \nin PDF (via LaTeX) builds done by latexmk.\n",
+               "description": "Library for rendering SVG files and using them\nin PDF (via LaTeX) builds done by latexmk.\n",
                "import_name": "librsvg",
                "url": {
                   "docs": "https://wiki.gnome.org/Projects/LibRsvg",
