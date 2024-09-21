@@ -1,15 +1,4 @@
-"""My New Project Test-Suite
-
-Copyright 2024 RepoDynamics
-
-Replace this text with a short abstract of My New Project, describing its
-purpose and main features. By default, this text is displayed on the
-repository's main README file, on the homepage of the project's website, on the
-project's PyPI and TestPyPI pages, and on the package's main docstring. Like all
-other entries in the repository's control center, this text can also contain
-dynamic references to other entries, using the <code>${‎{ json-path.to.value
-}}</code> syntax. By default, the first occurrence of the name of the project in
-this text is styled as strong and linked to the project's website.
+"""My New Project Test-Suite.
 
 Copyright (C) 2024 RepoDynamics
 
