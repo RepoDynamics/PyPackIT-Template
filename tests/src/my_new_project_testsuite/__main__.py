@@ -1,9 +1,10 @@
 """Run all tests for the package."""
+
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
 import argparse
 import json
+from typing import TYPE_CHECKING
 
 import my_new_project_testsuite as testsuite
 
@@ -13,11 +14,11 @@ if TYPE_CHECKING:
 
 class TestSuiteCLIInputError(Exception):
     """Raised when there is an error in CLI user inputs."""
-    pass
 
 
 class TestSuiteCLIInputDecodeError(TestSuiteCLIInputError):
     """Raised when there is an error decoding JSON user inputs."""
+
     def __init__(self, arg_name: str, arg_value: str, cause: json.JSONDecodeError):
         self.arg_name = arg_name
         self.arg_value = arg_value
@@ -31,7 +32,8 @@ class TestSuiteCLIInputDecodeError(TestSuiteCLIInputError):
 
 class TestSuiteCLIInputTypeError(TestSuiteCLIInputError):
     """Raised when there is a type mismatch in CLI user inputs."""
-    def __init__(self, arg_name: str, arg_value: Any, arg_type: type):
+
+    def __init__(self, arg_name: str, arg_value: str | bool | int | float | list | dict, arg_type: type):
         self.arg_name = arg_name
         self.arg_value = arg_value
         self.arg_type = arg_type
@@ -41,6 +43,7 @@ class TestSuiteCLIInputTypeError(TestSuiteCLIInputError):
             f"Input value: '{arg_value}'"
         )
         return
+
 
 def main():
     """Run the command-line interface of the test suite."""
@@ -72,9 +75,13 @@ def main():
         try:
             parsed_arg = json.loads(input_arg)
         except json.JSONDecodeError as e:
-            raise TestSuiteCLIInputDecodeError(arg_name=arg_name, arg_value=input_arg, cause=e) from e
+            raise TestSuiteCLIInputDecodeError(
+                arg_name=arg_name, arg_value=input_arg, cause=e
+            ) from e
         if not isinstance(parsed_arg, arg_type):
-            raise TestSuiteCLIInputTypeError(arg_name=arg_name, arg_value=parsed_arg, arg_type=arg_type)
+            raise TestSuiteCLIInputTypeError(
+                arg_name=arg_name, arg_value=parsed_arg, arg_type=arg_type
+            )
         parsed_args[arg_name] = parsed_arg
 
     testsuite.run(
