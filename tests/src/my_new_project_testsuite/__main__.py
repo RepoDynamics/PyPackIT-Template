@@ -4,12 +4,8 @@ from __future__ import annotations
 
 import argparse
 import json
-from typing import TYPE_CHECKING
 
 import my_new_project_testsuite as testsuite
-
-if TYPE_CHECKING:
-    from typing import Any
 
 
 class TestSuiteCLIInputError(Exception):
@@ -33,7 +29,12 @@ class TestSuiteCLIInputDecodeError(TestSuiteCLIInputError):
 class TestSuiteCLIInputTypeError(TestSuiteCLIInputError):
     """Raised when there is a type mismatch in CLI user inputs."""
 
-    def __init__(self, arg_name: str, arg_value: str | bool | int | float | list | dict, arg_type: type):
+    def __init__(
+        self,
+        arg_name: str,
+        arg_value: str | bool | float | list | dict,
+        arg_type: type,
+    ):
         self.arg_name = arg_name
         self.arg_value = arg_value
         self.arg_type = arg_type
