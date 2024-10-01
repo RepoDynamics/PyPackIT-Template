@@ -1,0 +1,82 @@
+[project]
+name = "My-New-Project-TestSuite"
+description = "A Placeholder Project Title"
+keywords = [
+    "First Keyword",
+    "Second Keyword",
+    "Third Keyword",
+    "Fourth Keyword",
+    "Fifth Keyword",
+    "Sixth Keyword",
+]
+classifiers = [
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Typing :: Typed",
+]
+authors = [
+    {name = "RepoDynamics", email = "contact@repodynamics.com"},
+]
+maintainers = [
+    {name = "RepoDynamics", email = "contact@repodynamics.com"},
+]
+requires-python = ">= 3.10"
+dependencies = [
+    "pytest == 8.3.3",
+    "coverage == 7.6.1",
+    "pytest-cov == 5.0.0",
+    "pytest-html == 4.1.1",
+    "pkgdata",
+]
+dynamic = [
+    "version",
+]
+license = {file = "LICENSE"}
+
+[project.urls]
+Homepage = "https://RepoDynamics.github.io/PyPackIT-Template"
+Source = "https://github.com/RepoDynamics/PyPackIT-Template"
+Download = "https://github.com/RepoDynamics/PyPackIT-Template/releases"
+Issue-Tracker = "https://github.com/RepoDynamics/PyPackIT-Template/issues"
+
+[build-system]
+requires = [
+    "setuptools >= 72.1.0",
+    "versioningit >= 3.1.2",
+]
+build-backend = "setuptools.build_meta"
+
+[tool]
+[tool.setuptools]
+include-package-data = true
+zip-safe = false
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = true
+
+[tool.versioningit]
+[tool.versioningit.vcs]
+method = "git"
+match = ["ver/[0-9]*.[0-9]*.[0-9]*"]
+default-tag = "ver/0.0.0"
+
+[tool.versioningit.tag2version]
+rmprefix = "ver/"
+
+[tool.versioningit.format]
+distance = "{base_version}+{distance}.{committer_date:%Y.%m.%d}.{revision}"
+dirty = "{base_version}+0.{committer_date:%Y.%m.%d}.{revision}.dirty"
+distance-dirty = "{base_version}+{distance}.{committer_date:%Y.%m.%d}.{revision}.dirty"
+
+[tool.versioningit.onbuild]
+method = "replace-version"
+regex = "^\\\\s*__version_details__\\\\s*=\\\\s*(?P<version>.*)"
+require-match = true
+source-file = "tests/src/my_new_project_testsuite/__init__.py"
+build-file = "my_new_project_testsuite/__init__.py"
+replacement = "dict(\n  version: \"{version}\",\n  author_date: \"{author_date:%Y.%m.%d}\",\n  build_date: \"{build_date:%Y.%m.%d}\",\n  branch: \"{branch}\",\n  distance: \"{distance}\",\n  head_commit_hash: \"{revision}\",\n)\n"

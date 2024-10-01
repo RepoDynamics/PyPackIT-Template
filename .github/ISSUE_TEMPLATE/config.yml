@@ -1,0 +1,7 @@
+contact_links:
+- name: 🎓️  Learn More
+  about: Not sure where to start? Read our contribution guide to learn more.
+  url: https://RepoDynamics.github.io/PyPackIT-Template/contribute
+- name: 💬  Contact Us
+  about: Have another inquiry or need help? Contact us directly!
+  url: https://RepoDynamics.github.io/PyPackIT-Template/about/contact

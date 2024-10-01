@@ -1,4 +1,11 @@
 docs/website/.build/
+docs/website/source/api/**/*
+.local/cache/**
+!.local/cache/**/
+!.local/cache/**/README.md
+.local/report/**
+!.local/report/**/
+!.local/report/**/README.md
 __pycache__/
 *.py[cod]
 *$py.class
@@ -79,7 +86,3 @@ cython_debug/
 .idea/
 .DS_Store
 .github/.control/local_config.yaml
-.local/**
-!.local/**/
-!.local/**/README.md
-

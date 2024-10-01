@@ -1,0 +1,2 @@
+graft src/my_new_project/data
+global-exclude *.py[cod] __pycache__ *.so

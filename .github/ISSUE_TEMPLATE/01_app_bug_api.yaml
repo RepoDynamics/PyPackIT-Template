@@ -1,0 +1,169 @@
+name:  🖥 App 🐞 Bug Report 📱 API
+description: Report a problem (e.g., errors and unexpected results) encountered while
+  using My New Project's Python API.
+labels:
+- 'Type: patch-release'
+- 'SubType: api'
+- 'Status: triage'
+assignees:
+- RepoDynamics
+body:
+- type: markdown
+  attributes:
+    value: "<p align=\"justify\">\n  Thank you for providing feedback on My New Project;
+      we greatly appreciate your contribution!\n  Before submitting a ticket, please
+      take a moment to review and accept our terms and conditions.\n</p> <h2>Terms
+      and Conditions</h2> <h3>⛔ Choosing the Right Form</h3> <p align=\"justify\"\
+      >\n  Please note that this form is specifically for reporting a\n  <b>non-security-related
+      bug in My New Project's Python API</b>,\n  i.e. an unexpected behavior that
+      occurs while using the application as an import package.\n  To report a security
+      vulnerability please first read our\n  <a href=\"https://github.com/RepoDynamics/PyPackIT-Template/blob/main/SECURITY.md\"\
+      >security policy</a>, and fill a\n  <a href=\"https://github.com/RepoDynamics/PyPackIT-Template/security/advisories/new\"\
+      >private security advisory form</a> instead.\n  For other types of issues, such
+      as problems in the\n  <a href=\"{{ repo.url.issues.new.app_bug_setup }}\">installation
+      process</a>,\n  <a href=\"{{ repo.url.issues.new.docs_bug_site }}\">website</a>,
+      or\n  <a href=\"{{ repo.url.issues.new.docs_bug_content }}\">documentation</a>,\n\
+      \  or for requesting new features and enhancements, please select the appropriate
+      form\n  from the <a href=\"{{ repo.url.issues.template_chooser }}\">issue template
+      chooser</a>.\n</p> <blockquote>\n  💡 <a href=\"https://RepoDynamics.github.io/PyPackIT-Template/about/contact\"\
+      ><b>Contact us</b></a>\n  <br>\n  <p align=\"justify\">\n    Can't find the
+      right form or unsure about which one to choose?\n    Ask a question and get
+      help in the\n    <a href=\"https://github.com/RepoDynamics/PyPackIT-Template/discussions/new?category=question_issues\"\
+      >discussion forum</a>.\n  </p>\n</blockquote> <h3>⚠️ Verifying the Bug</h3>
+      Before submitting a report, please make sure that you are following our <a href=\"\
+      https://RepoDynamics.github.io/PyPackIT-Template/contribute\">Bug Report Guidelines</a>
+      to verify that: <ol>\n  <li>\n    The issue you are experiencing is in fact
+      a bug, and not a documented expected behavior.\n  </li>\n  <li>\n    The bug
+      is reproducible in the latest version of the release, and has not yet been reported.\n\
+      \  </li>\n</ol> <blockquote>\n    💡 <a href=\"https://github.com/RepoDynamics/PyPackIT-Template/discussions/new?category=question_issues\"\
+      ><b>Open a discussion instead!</b></a>\n    <br>\n    This verification process
+      is non-trivial, and can be time-consuming.\n    If you are not a collaborator
+      and don't have the time to go through the process,\n    you can always open
+      a discussion instead; we will investigate the problem as soon as possible,\n\
+      \    and convert the discussion into an issue if the bug is verified.\n</blockquote>
+      <h3>✅ Agreements</h3>"
+- type: checkboxes
+  id: terms
+  attributes:
+    label: 'To submit an issue, please agree to the following terms and conditions:'
+    options:
+    - label: I have read the [Contributing Guidelines]({{repo.url.health_file.contributing}})
+        and am following the [Bug Report Guidelines](https://RepoDynamics.github.io/PyPackIT-Template/contribute).
+      required: true
+    - label: I have read, understood, and agree to follow the [Code of Conduct]({{repo.url.health_file.code_of_conduct}}).
+      required: true
+- type: markdown
+  attributes:
+    value: <h3>🧑‍💻 Collaborate</h3>
+- type: checkboxes
+  id: collab
+  attributes:
+    label: "Thank you again for filling this bug report.\nIf you are willing to collaborate
+      on fixing the issue, please select the option below.\n"
+    options:
+    - label: I am willing to work on the issue and submit a pull request.
+      required: false
+- type: markdown
+  attributes:
+    value: <br><h2>System and Version Specifications</h2>
+- type: dropdown
+  id: os
+  attributes:
+    label: Operating System
+    description: "Please select all operating systems on which you have encountered
+      the bug.\n"
+    multiple: true
+    options:
+    - Linux
+    - MacOS
+    - Windows
+  validations:
+    required: true
+- type: dropdown
+  id: python_version
+  attributes:
+    label: Python Version
+    description: "Please select all Python versions in which you have encountered
+      the bug.\n"
+    multiple: true
+    options:
+    - '3.10'
+    - '3.11'
+    - '3.12'
+  validations:
+    required: true
+- type: dropdown
+  id: package_manager
+  attributes:
+    label: Package Manager
+    description: "Please select the package manager used to download and install My
+      New Project.\n"
+    multiple: false
+    options:
+    - pip
+  validations:
+    required: true
+- type: dropdown
+  id: version
+  attributes:
+    label: Package Version
+    description: "Please select all My New Project versions in which you have encountered
+      the bug.\n"
+    multiple: true
+    options:
+    - 0.0.0
+  validations:
+    required: true
+- type: textarea
+  id: environment
+  attributes:
+    label: Environment
+    description: "Please provide the details of all installed packages and their exact
+      versions in the environment where you have encountered the bug. Follow the instructions
+      below based on the package manager you have selected:\n1. **`pip`**: Run `pip
+      freeze > requirements.txt` in your terminal within the environment, and copy
+      the contents of the generated `requirements.txt` file here.\n2. **`conda`**:
+      Run `conda env export > environment.yml` in your terminal within the environment
+      (or alternatively `conda env export -n {YOUR_ENVIRONMENT_NAME} > environment.yml`),
+      and copy the contents of the generated `environment.yml` file here."
+  validations:
+    required: true
+- type: markdown
+  attributes:
+    value: "<br>\n<h2>Bug Report</h2>\n"
+- type: input
+  id: api_entry
+  attributes:
+    label: Fully Qualified Name
+    description: Please provide the fully qualified name (e.g., `package_name.module_name.ClassName.method_name`)
+      of the API endpoint that is causing the problem.
+    value: my_new_project.
+  validations:
+    required: true
+- type: textarea
+  id: summary
+  attributes:
+    label: Summary
+    description: Please provide a brief summary of the bug.
+  validations:
+    required: true
+- type: textarea
+  id: code
+  attributes:
+    label: Test Case or Minimal Reproducible Example (MRE)
+    description: Please provide a test case (preferred), or a minimal complete verifiable
+      code example to reproduce the bug.
+    value: "import my_new_project\n\ndef test():\n    ...\n    assert ...\n"
+    render: python
+  validations:
+    required: true
+- type: textarea
+  id: log
+  attributes:
+    label: Error Message / Output
+    description: If you have provided an MRE instead of a test case, please copy the
+      output of the MRE here. This may be the full traceback of an error, or some
+      other output that demonstrates the bug.
+    render: shell
+  validations:
+    required: false
