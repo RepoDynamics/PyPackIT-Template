@@ -2,12 +2,15 @@
 
 from __future__ import annotations as _annotations
 
+import copy as _copy
 import json as _json
 from pathlib import Path as _Path
 from typing import TYPE_CHECKING as _TYPE_CHECKING
+import os as _os
 
 import gittidy as _git
 from loggerman import logger as _logger
+from sphinx.builders.dirhtml import DirectoryHTMLBuilder as _DirectoryHTMLBuilder
 from versionman import pep440_semver as _semver
 
 try:
@@ -25,8 +28,25 @@ _METADATA_FILEPATH = ".github/.control/.metadata.json"
 _globals = {}
 
 
+class _CustomDirectoryHTMLBuilder(_DirectoryHTMLBuilder):
+    """Customized DirectoryHTMLBuilder to exclude the 404 file."""
+
+    name = 'dirhtml'
+
+    def get_target_uri(self, docname: str, typ: str | None = None) -> str:
+        if docname == "404":
+            return ""
+        return super().get_target_uri(docname=docname, typ=typ)
+
+    def get_outfilename(self, pagename: str) -> str:
+        if pagename == "404":
+            return _os.path.join(self.outdir, '404.html')
+        return super().get_outfilename(pagename=pagename)
+
+
 def setup(app: Sphinx):
     """Add custom configurations to the Sphinx application."""
+    app.add_builder(_CustomDirectoryHTMLBuilder, override=True)
     app.connect("source-read", _source_jinja_template)
     return
 
@@ -271,7 +291,7 @@ def _read_metadata() -> dict[str, Any]:
 
 def _add_html_context():
     """Add the HTML context to the Sphinx configuration."""
-    _globals.setdefault("html_context", {}).update({"pp_meta": _meta})
+    _globals.setdefault("html_context", {}).update({"pp_meta": _copy.deepcopy(_meta)})
     return
 
 
@@ -292,11 +312,12 @@ def _add_intersphinx_mapping():
             to_get.append(key)
     if not to_get:
         return
-    mapping_addon = _get_intersphinx_mapping(packages=set(error_msg))
+    mapping_addon = _get_intersphinx_mapping(packages=set(to_get))
     mapping.update(mapping_addon)
     return
 
 
+_logger.initialize(realtime_levels=list(range(1, 7)))
 _path_root, _path_to_root = _get_path_repo_root()
 _meta = _read_metadata()
 _add_sphinx()

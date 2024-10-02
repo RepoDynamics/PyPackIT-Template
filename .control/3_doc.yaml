@@ -250,6 +250,50 @@ health:
     content:
       heading: Security Policy
 web:
+  toc:
+    path: .toc.yaml
+    root: index
+    defaults:
+      hidden: true
+    entries:
+      - file: intro/index
+        title: Intro
+        options:
+          numbered: true
+        entries:
+          - file: intro/overview/index
+          - file: intro/background/index
+      - file: manual/index
+        title: Manual
+        options:
+          numbered: true
+        entries:
+          - file: manual/quickstart/index
+          - file: manual/install/index
+      - file: api/index
+        title: API
+        entries:
+          - file: api/${{ pkg.import_name }}/${{ pkg.import_name }}
+      - file: news/index
+        title: News
+        entries:
+          - glob: news/post/**
+      - file: contribute/index
+        title: Contribute
+        options:
+          numbered: true
+      - file: about/index
+        title: About
+        options:
+          numbered: true
+        entries:
+          - file: about/contact/index
+      - file: help/index
+        title: Help
+        options:
+          numbered: true
+        entries:
+          - file: help/sitemap/index
   sphinx:
     config:
       trim_footnote_reference_space: true
@@ -531,7 +575,7 @@ web:
           spec: sphinx-external-toc = 1.0.1
           channel: conda-forge
       config:
-        external_toc_path: _toc.yaml
+        external_toc_path: ${{ web.toc.path }}
         external_toc_exclude_missing: false
     autodoc2:
       dependency:
@@ -695,6 +739,18 @@ web:
           interactive: true  # https://atomiks.github.io/tippyjs/v6/all-props/#interactive
           delay: [200, 500]  # https://atomiks.github.io/tippyjs/v6/all-props/#delay
           duration: [200, 100]  # https://atomiks.github.io/tippyjs/v6/all-props/#duration
+    not_found_page:
+      dependency:
+        import_name: notfound.extension
+        description: Handling relative links in the custom 404 page.
+        url:
+          docs: https://sphinx-notfound-page.readthedocs.io/
+          source: https://github.com/readthedocs/sphinx-notfound-page
+          pip: https://pypi.org/project/sphinx-notfound-page/
+        pip:
+          spec: sphinx-notfound-page == 1.0.4
+      config:
+        notfound_urls_prefix: /${{ repo.name }}/  # dynamically set in conf.py if not set here
   env:
     file:
       conda:

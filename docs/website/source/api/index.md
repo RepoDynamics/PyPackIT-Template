@@ -1,5 +1,0 @@
----
-ccid: api
----
-
-# API Reference

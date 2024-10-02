@@ -1,21 +1,3 @@
-"""My New Project Test-Suite.
-
-Copyright (C) 2024 RepoDynamics
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published
-by the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-"""
-
 import tempfile
 from pathlib import Path
 
@@ -108,7 +90,7 @@ def run(
                     ("path_cache", path_cache),
                 )
             ):
-                config = config.replace(template, str(value))
+                config = config.replace(template, value.as_posix())
             file_temp_path = path_config_temp / path.name
             file_temp_path.write_text(config)
             if path.stem == "pytest":
